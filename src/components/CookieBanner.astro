@@ -1,0 +1,249 @@
+---
+// Cookie Consent Banner für Lichtspielfreunde e.V.
+---
+
+<div id="cookie-banner" class="cookie-banner" role="dialog" aria-labelledby="cookie-banner-title" aria-describedby="cookie-banner-desc" style="display: none;">
+	<div class="cookie-content">
+		<div class="cookie-text-wrapper">
+			<div class="cookie-icon-title">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22" class="cookie-icon" aria-hidden="true">
+					<path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5" stroke-linecap="round" stroke-linejoin="round"/>
+					<circle cx="8.5" cy="8.5" r="1" fill="currentColor"/>
+					<circle cx="7.5" cy="14.5" r="1" fill="currentColor"/>
+					<circle cx="15.5" cy="15.5" r="1" fill="currentColor"/>
+					<circle cx="12" cy="11" r="1" fill="currentColor"/>
+				</svg>
+				<h3 id="cookie-banner-title">Datenschutz & Cookie-Einstellungen</h3>
+			</div>
+			<p id="cookie-banner-desc">
+				Wir nutzen Cookies und ähnliche Technologien, um Ihnen ein optimales Besuchserlebnis zu bieten, 
+				Funktionen für unseren geschützten Filmbereich bereitzustellen und den Verein digital zu präsentieren.
+				Sie können selbst entscheiden, welche Cookies Sie zulassen möchten. Weitere Informationen finden Sie in unserer 
+				<a href="/datenschutz">Datenschutzerklärung</a>.
+			</p>
+
+			<details class="cookie-details">
+				<summary>Details & Kategorien anzeigen</summary>
+				<div class="cookie-categories">
+					<div class="cookie-category">
+						<label class="category-label">
+							<input type="checkbox" checked disabled />
+							<div>
+								<strong>Technisch notwendige Cookies (Erforderlich)</strong>
+								<p>Diese Cookies sind für den grundlegenden Betrieb der Website und die Authentifizierung im geschützten Filmbereich zwingend erforderlich.</p>
+							</div>
+						</label>
+					</div>
+					<div class="cookie-category">
+						<label class="category-label">
+							<input type="checkbox" id="cookie-opt-analytics" />
+							<div>
+								<strong>Komfort & Analysen (Optional)</strong>
+								<p>Helfen uns zu verstehen, welche Filmseiten besonders gefragt sind, um unser Kinoprogramm noch besser auf die Wünsche des Publikums abzustimmen.</p>
+							</div>
+						</label>
+					</div>
+				</div>
+			</details>
+		</div>
+
+		<div class="cookie-actions">
+			<button type="button" class="btn btn-secondary btn-sm" id="btn-cookie-necessary">
+				Nur notwendige
+			</button>
+			<button type="button" class="btn btn-primary btn-sm" id="btn-cookie-all">
+				Alle akzeptieren
+			</button>
+		</div>
+	</div>
+</div>
+
+<script>
+	const banner = document.getElementById('cookie-banner');
+	const btnAll = document.getElementById('btn-cookie-all');
+	const btnNecessary = document.getElementById('btn-cookie-necessary');
+	const chkAnalytics = document.getElementById('cookie-opt-analytics') as HTMLInputElement | null;
+
+	const CONSENT_KEY = 'lichtspiel_cookie_consent_v1';
+
+	function initConsent() {
+		const savedConsent = localStorage.getItem(CONSENT_KEY);
+		if (!savedConsent) {
+			if (banner) banner.style.display = 'block';
+		}
+	}
+
+	function saveConsent(level: 'all' | 'necessary') {
+		const data = {
+			level,
+			analytics: level === 'all' || (chkAnalytics ? chkAnalytics.checked : false),
+			timestamp: new Date().toISOString(),
+		};
+		localStorage.setItem(CONSENT_KEY, JSON.stringify(data));
+		if (banner) banner.style.display = 'none';
+
+		// Dispatch event for other components if needed
+		window.dispatchEvent(new CustomEvent('cookie-consent-updated', { detail: data }));
+	}
+
+	if (btnAll) {
+		btnAll.addEventListener('click', () => saveConsent('all'));
+	}
+
+	if (btnNecessary) {
+		btnNecessary.addEventListener('click', () => saveConsent('necessary'));
+	}
+
+	// Global helper to reopen settings from footer/privacy page
+	declare global {
+		interface Window {
+			openCookieSettings?: () => void;
+		}
+	}
+
+	window.openCookieSettings = () => {
+		if (banner) {
+			banner.style.display = 'block';
+			banner.scrollIntoView({ behavior: 'smooth' });
+		}
+	};
+
+	// Run on DOM ready
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initConsent);
+	} else {
+		initConsent();
+	}
+</script>
+
+<style>
+	.cookie-banner {
+		position: fixed;
+		bottom: 1.25rem;
+		left: 1.25rem;
+		right: 1.25rem;
+		max-width: 860px;
+		margin: 0 auto;
+		background: #141824;
+		border: 1px solid var(--gold);
+		border-radius: var(--radius-md);
+		padding: 1.25rem 1.5rem;
+		box-shadow: 0 10px 40px rgba(0, 0, 0, 0.75), 0 0 15px rgba(229, 169, 60, 0.2);
+		z-index: 9999;
+		animation: slideUp 0.35s ease-out;
+	}
+
+	@keyframes slideUp {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	.cookie-content {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+
+	.cookie-icon-title {
+		display: flex;
+		align-items: center;
+		gap: 0.65rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.cookie-icon {
+		color: var(--gold);
+		flex-shrink: 0;
+	}
+
+	.cookie-icon-title h3 {
+		margin: 0;
+		font-size: 1.15rem;
+		color: #fff;
+	}
+
+	.cookie-banner p {
+		font-size: 0.92rem;
+		margin-bottom: 0.75rem;
+		color: var(--text-secondary);
+	}
+
+	.cookie-details {
+		margin-top: 0.5rem;
+		font-size: 0.88rem;
+		background: rgba(0, 0, 0, 0.25);
+		border-radius: 6px;
+		padding: 0.6rem 0.8rem;
+		border: 1px solid var(--border-subtle);
+	}
+
+	.cookie-details summary {
+		cursor: pointer;
+		color: var(--gold-light);
+		font-weight: 500;
+	}
+
+	.cookie-categories {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		margin-top: 0.75rem;
+		padding-top: 0.75rem;
+		border-top: 1px solid var(--border-subtle);
+	}
+
+	.category-label {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.75rem;
+		cursor: pointer;
+	}
+
+	.category-label input {
+		margin-top: 0.25rem;
+		accent-color: var(--gold);
+	}
+
+	.category-label strong {
+		color: #fff;
+		display: block;
+		margin-bottom: 0.15rem;
+	}
+
+	.category-label p {
+		margin: 0;
+		font-size: 0.84rem;
+		color: var(--text-muted);
+	}
+
+	.cookie-actions {
+		display: flex;
+		justify-content: flex-end;
+		gap: 0.75rem;
+		flex-wrap: wrap;
+	}
+
+	@media (max-width: 600px) {
+		.cookie-banner {
+			bottom: 0.5rem;
+			left: 0.5rem;
+			right: 0.5rem;
+			padding: 1rem;
+		}
+
+		.cookie-actions {
+			flex-direction: column-reverse;
+		}
+
+		.cookie-actions button {
+			width: 100%;
+		}
+	}
+</style>
+

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none" aria-label="Lichtspielfreunde Logo">
+  <defs>
+    <linearGradient id="reelGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#E5A93C"/>
+      <stop offset="100%" stop-color="#B87315"/>
+    </linearGradient>
+    <linearGradient id="beamGrad" x1="50" y1="32" x2="70" y2="32" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FCD34D" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#FCD34D" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Film Reel Icon -->
+  <g transform="translate(6, 6)">
+    <!-- Outer reel circle -->
+    <circle cx="26" cy="26" r="24" stroke="url(#reelGrad)" stroke-width="3" fill="#18181B" />
+    <circle cx="26" cy="26" r="21" stroke="#3F3F46" stroke-width="1" fill="none" stroke-dasharray="3 3"/>
+    
+    <!-- Inner reel hub -->
+    <circle cx="26" cy="26" r="8" fill="url(#reelGrad)"/>
+    <circle cx="26" cy="26" r="3" fill="#09090B"/>
+    
+    <!-- Reel holes -->
+    <circle cx="26" cy="11" r="4.5" fill="#09090B" stroke="#E5A93C" stroke-width="1"/>
+    <circle cx="39" cy="20" r="4.5" fill="#09090B" stroke="#E5A93C" stroke-width="1"/>
+    <circle cx="34" cy="37" r="4.5" fill="#09090B" stroke="#E5A93C" stroke-width="1"/>
+    <circle cx="18" cy="37" r="4.5" fill="#09090B" stroke="#E5A93C" stroke-width="1"/>
+    <circle cx="13" cy="20" r="4.5" fill="#09090B" stroke="#E5A93C" stroke-width="1"/>
+    
+    <!-- Light projection ray -->
+    <polygon points="50,22 66,15 66,37 50,30" fill="url(#beamGrad)" />
+  </g>
+
+  <!-- Typography -->
+  <g transform="translate(74, 18)">
+    <text x="0" y="16" font-family="'Cinzel', 'Playfair Display', 'Georgia', serif" font-size="19" font-weight="700" letter-spacing="1.5" fill="#F4F4F5">LICHTSPIEL</text>
+    <text x="122" y="16" font-family="'Cinzel', 'Playfair Display', 'Georgia', serif" font-size="19" font-weight="700" letter-spacing="1.5" fill="#E5A93C">FREUNDE</text>
+    <text x="0" y="32" font-family="'Inter', -apple-system, sans-serif" font-size="8.5" font-weight="500" letter-spacing="2.2" fill="#A1A1AA">KINO-VEREIN E.V.</text>
+  </g>
+</svg>
+

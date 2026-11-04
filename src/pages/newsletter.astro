@@ -1,0 +1,180 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import CookieBanner from '../components/CookieBanner.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE, VEREIN_NAME } from '../consts';
+---
+
+<!doctype html>
+<html lang="de">
+	<head>
+		<BaseHead title={`Newsletter – ${SITE_TITLE}`} description={`Der Newsletter der ${VEREIN_NAME}. Monatliche Programmvorschauen, Filmtipps und Einladungen.`} />
+	</head>
+	<body>
+		<Header />
+
+		<main>
+			<div class="newsletter-wrapper">
+				<div class="card newsletter-card">
+					<div class="newsletter-icon">📬</div>
+					<span class="sub-heading">Immer bestens informiert</span>
+					<h1>Der Lichtspielfreunde-Newsletter</h1>
+					<p class="newsletter-intro">
+						Verpassen Sie keine Filmreihe mehr! Unser Newsletter erscheint ein- bis zweimal monatlich und liefert Ihnen:
+					</p>
+
+					<ul class="newsletter-benefits">
+						<li>✓ Rechtzeitige Ankündigung des neuen Quartalsprogramms</li>
+						<li>✓ Exklusive Hintergrundberichte, Filmtipps und Interviews</li>
+						<li>✓ Infos zu Sonderveranstaltungen, 35mm-Sonderabenden und Gästen</li>
+						<li>✓ Jederzeit mit einem Klick abbestellbar – kein Spam, garantiert.</li>
+					</ul>
+
+					<form id="newsletter-form" class="newsletter-form">
+						<div class="form-group">
+							<label for="nl-name">Ihr Vorname (optional)</label>
+							<input type="text" id="nl-name" name="name" placeholder="z.B. Maria" />
+						</div>
+
+						<div class="form-group">
+							<label for="nl-email">Ihre E-Mail-Adresse *</label>
+							<input type="email" id="nl-email" name="email" required placeholder="ihre.adresse@beispiel.de" />
+						</div>
+
+						<div class="form-group">
+							<label class="checkbox-row">
+								<input type="checkbox" required />
+								<span>Ich stimme zu, dass mich die {VEREIN_NAME} per E-Mail über das Kinoprogramm und Vereinsaktivitäten informieren dürfen. Abmeldung jederzeit möglich. (<a href="/datenschutz">Datenschutz</a>)</span>
+							</label>
+						</div>
+
+						<button type="submit" class="btn btn-primary full-width-btn">
+							Kostenlos anmelden
+						</button>
+
+						<div id="newsletter-feedback" class="form-feedback" style="display: none;"></div>
+					</form>
+				</div>
+			</div>
+		</main>
+
+		<Footer />
+		<CookieBanner />
+
+		<script>
+			const form = document.getElementById('newsletter-form') as HTMLFormElement | null;
+			const feedback = document.getElementById('newsletter-feedback');
+
+			if (form && feedback) {
+				form.addEventListener('submit', (e) => {
+					e.preventDefault();
+					const formData = new FormData(form);
+					const email = formData.get('email');
+
+					feedback.innerHTML = `
+						<div class="alert alert-success">
+							<h4>Fast geschafft!</h4>
+							<p>Wir haben eine Bestätigungs-E-Mail (Double-Opt-In) an <strong>${email}</strong> geschickt. Bitte klicken Sie auf den darin enthaltenen Link, um Ihre Anmeldung abzuschließen.</p>
+						</div>
+					`;
+					feedback.style.display = 'block';
+					form.reset();
+				});
+			}
+		</script>
+
+		<style>
+			.newsletter-wrapper {
+				max-width: 680px;
+				margin: 1.5rem auto 3rem;
+			}
+
+			.newsletter-card {
+				padding: 3rem 2.5rem;
+				text-align: center;
+				border-color: rgba(229, 169, 60, 0.35);
+			}
+
+			.newsletter-icon {
+				font-size: 3rem;
+				margin-bottom: 0.75rem;
+			}
+
+			.newsletter-intro {
+				font-size: 1.05rem;
+				color: var(--text-secondary);
+				margin-bottom: 1.5rem;
+			}
+
+			.newsletter-benefits {
+				list-style: none;
+				padding: 0;
+				margin: 0 auto 2.25rem;
+				display: flex;
+				flex-direction: column;
+				gap: 0.65rem;
+				text-align: left;
+				max-width: 520px;
+				font-size: 0.95rem;
+				color: var(--text-secondary);
+			}
+
+			.newsletter-benefits li {
+				background: rgba(255, 255, 255, 0.02);
+				padding: 0.4rem 0.6rem;
+				border-radius: 4px;
+			}
+
+			.newsletter-form {
+				text-align: left;
+				max-width: 520px;
+				margin: 0 auto;
+			}
+
+			.full-width-btn {
+				width: 100%;
+				margin-top: 0.5rem;
+			}
+
+			.checkbox-row {
+				display: flex;
+				align-items: flex-start;
+				gap: 0.65rem;
+				font-size: 0.85rem;
+				cursor: pointer;
+				color: var(--text-muted);
+			}
+
+			.checkbox-row input {
+				margin-top: 0.2rem;
+				accent-color: var(--gold);
+			}
+
+			.alert-success {
+				background: rgba(16, 185, 129, 0.15);
+				border: 1px solid #10b981;
+				border-radius: var(--radius-sm);
+				padding: 1.25rem;
+				margin-top: 1.25rem;
+			}
+
+			.alert-success h4 {
+				color: #34d399;
+				margin-bottom: 0.4rem;
+			}
+
+			.alert-success p {
+				margin: 0;
+				color: #d1fae5;
+			}
+
+			@media (max-width: 600px) {
+				.newsletter-card {
+					padding: 2rem 1.25rem;
+				}
+			}
+		</style>
+	</body>
+</html>
+
