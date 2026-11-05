@@ -1,866 +1,1023 @@
 ---
-import { getCollection } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import CookieBanner from '../components/CookieBanner.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { CURRENT_QUARTER, SITE_DESCRIPTION, SITE_TAGLINE, SITE_TITLE } from '../consts';
+import { getCollection } from "astro:content";
+import BaseHead from "../components/BaseHead.astro";
+import CookieBanner from "../components/CookieBanner.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import {
+  CURRENT_QUARTER,
+  SITE_DESCRIPTION,
+  SITE_TAGLINE,
+  SITE_TITLE,
+} from "../consts";
+
+// Helper to safely get a valid Date object from any movie entry
+function getMovieDate(movie: any): Date {
+  const raw =
+    movie.data.screeningDate || movie.data.showtime || movie.data.date;
+  const d = new Date(raw);
+  return isNaN(d.getTime()) ? new Date() : d;
+}
 
 // Load cinema program movies and sort chronologically
-const allMovies = await getCollection('programm');
+const allMovies = await getCollection("programm");
 const sortedMovies = allMovies.sort(
-	(a, b) => new Date(a.data.screeningDate).getTime() - new Date(b.data.screeningDate).getTime()
+  (a, b) => getMovieDate(a).getTime() - getMovieDate(b).getTime(),
 );
 
 // Find highlighted movie or next upcoming
-const highlightMovie = sortedMovies.find((m) => m.data.highlight) || sortedMovies[0];
+const highlightMovie =
+  sortedMovies.find((m) => m.data.highlight) || sortedMovies[0];
 
 // Extract distinct months for filtering
-const months = Array.from(new Set(sortedMovies.map((m) => m.data.month).filter(Boolean)));
+const months = Array.from(
+  new Set(sortedMovies.map((m) => m.data.month).filter(Boolean)),
+);
 
 // Board members data
 const vorstand = [
-	{
-		name: 'Dr. Helene Bergmann',
-		role: '1. Vorsitzende',
-		bio: 'Filmwissenschaftlerin und Mitgründerin der Lichtspielfreunde. Leidenschaftliche Verfechterin des europäischen Autorenkinos.',
-		image: '/images/programm/casablanca.jpg',
-	},
-	{
-		name: 'Marcus Lindemann',
-		role: '2. Vorsitzender & Technik',
-		bio: 'Begeisterter Cineast und Hüter unserer analogen 35mm-Projektoren sowie modernster DCI-Digitalprojektionstechnik.',
-		image: '/images/programm/der-himmel-ueber-berlin.jpg',
-	},
-	{
-		name: 'Klara Sommer',
-		role: 'Schatzmeisterin & Finanzen',
-		bio: 'Sorgt mit Herz und kühlem Kopf dafür, dass unsere gemeinnützige Kulturarbeit auf einem soliden finanziellen Fundament steht.',
-		image: '/images/programm/past-lives.jpg',
-	},
-	{
-		name: 'Julian Vance',
-		role: 'Schriftführer & Öffentlichkeitsarbeit',
-		bio: 'Journalist und Filmkritiker. Gestaltet unser monatliches Programmheft und moderiert die Filmgespräche mit Regisseur:innen.',
-		image: '/images/programm/cinema-paradiso.jpg',
-	},
+  {
+    name: "Dr. Helene Bergmann",
+    role: "1. Vorsitzende",
+    bio: "Filmwissenschaftlerin und Mitgründerin der Lichtspielfreunde. Leidenschaftliche Verfechterin des europäischen Autorenkinos.",
+    image: "/images/programm/casablanca.jpg",
+  },
+  {
+    name: "Marcus Lindemann",
+    role: "2. Vorsitzender & Technik",
+    bio: "Begeisterter Cineast und Hüter unserer analogen 35mm-Projektoren sowie modernster DCI-Digitalprojektionstechnik.",
+    image: "/images/programm/der-himmel-ueber-berlin.jpg",
+  },
+  {
+    name: "Klara Sommer",
+    role: "Schatzmeisterin & Finanzen",
+    bio: "Sorgt mit Herz und kühlem Kopf dafür, dass unsere gemeinnützige Kulturarbeit auf einem soliden finanziellen Fundament steht.",
+    image: "/images/programm/past-lives.jpg",
+  },
+  {
+    name: "Julian Vance",
+    role: "Schriftführer & Öffentlichkeitsarbeit",
+    bio: "Journalist und Filmkritiker. Gestaltet unser monatliches Programmheft und moderiert die Filmgespräche mit Regisseur:innen.",
+    image: "/images/programm/cinema-paradiso.jpg",
+  },
 ];
 ---
 
 <!doctype html>
 <html lang="de">
-	<head>
-		<BaseHead title={`${SITE_TITLE} – ${SITE_TAGLINE}`} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-
-		<main>
-			<!-- Hero Section -->
-			<section class="hero-section">
-				<div class="hero-badge">Gemeinnütziger Kino-Verein</div>
-				<h1 class="hero-title">Kino erleben.<br /><span class="text-gold">Gemeinschaft spüren.</span><br />Filmkunst fördern.</h1>
-				<p class="hero-subtitle">
-					Willkommen bei den <strong>Lichtspielfreunden e.V.</strong> Wir bringen Arthouse-Perlen, unvergessliche 
-					Filmklassiker, bewegende Dokumentationen und cineastische Entdeckungen auf die große Leinwand – 
-					mit Leidenschaft, persönlicher Einführung und Raum für Gespräche.
-				</p>
-				<div class="hero-actions">
-					<a href="#programm" class="btn btn-primary">
-						<svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
-							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
-						</svg>
-						Kinoprogramm {CURRENT_QUARTER}
-					</a>
-					<a href="/mitglied-werden" class="btn btn-secondary">
-						Mitglied werden
-					</a>
-				</div>
-			</section>
-
-			<!-- Highlight Movie Banner (if available) -->
-			{highlightMovie && (
-				<section class="highlight-banner card">
-					<div class="highlight-image-col">
-						<img 
-							src={highlightMovie.data.heroImage || '/images/programm/casablanca.jpg'} 
-							alt={`Filmplakat ${highlightMovie.data.title}`}
-							class="highlight-img"
-						/>
-					</div>
-					<div class="highlight-content-col">
-						<div class="badge-row">
-							<span class="badge badge-gold">Besonderes Highlight</span>
-							{highlightMovie.data.fsk && <span class="badge badge-fsk">{highlightMovie.data.fsk}</span>}
-							{highlightMovie.data.genre && <span class="badge">{highlightMovie.data.genre}</span>}
-						</div>
-						<h2 class="highlight-title">{highlightMovie.data.title}</h2>
-						<p class="highlight-meta">
-							<strong>Datum:</strong> {new Date(highlightMovie.data.screeningDate).toLocaleDateString('de-DE', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' })} um {highlightMovie.data.time}<br />
-							{highlightMovie.data.director && <span><strong>Regie:</strong> {highlightMovie.data.director} &bull; </span>}
-							{highlightMovie.data.year && <span>{highlightMovie.data.year} &bull; </span>}
-							{highlightMovie.data.duration && <span>{highlightMovie.data.duration}</span>}
-						</p>
-						<p class="highlight-desc">{highlightMovie.data.description}</p>
-						{highlightMovie.data.specialNote && (
-							<div class="special-note">
-								<strong>Besonderheit:</strong> {highlightMovie.data.specialNote}
-							</div>
-						)}
-						<div class="highlight-footer">
-							<a href={`#film-${highlightMovie.id}`} class="btn btn-primary btn-sm">
-								Details & Inhaltsangabe
-							</a>
-							<span class="location-tag">📍 {highlightMovie.data.location}</span>
-						</div>
-					</div>
-				</section>
-			)}
-
-			<!-- Kinoprogramm Section -->
-			<section id="programm" class="section-programm">
-				<div class="section-header">
-					<span class="sub-heading">Ausgewählte Filmperlen</span>
-					<h2>Kinoprogramm des nächsten Quartals ({CURRENT_QUARTER})</h2>
-					<p class="section-intro">
-						Unser Kuratorium hat für die kommenden Monate ein vielseitiges Programm zusammengestellt: 
-						von restaurierten 35mm-Klassikern bis hin zu preisgekrönten internationalen Meisterwerken der Gegenwart.
-					</p>
-
-					<!-- Month Filter Pills -->
-					{months.length > 0 && (
-						<div class="filter-bar" role="tablist" aria-label="Programm nach Monat filtern">
-							<button type="button" class="filter-pill active" data-filter="all">Alle Vorführungen ({sortedMovies.length})</button>
-							{months.map((m) => (
-								<button type="button" class="filter-pill" data-filter={m}>
-									{m}
-								</button>
-							))}
-						</div>
-					)}
-				</div>
-
-				<!-- Movie Cards Grid -->
-				<div class="movies-grid">
-					{sortedMovies.map((movie) => {
-						const dateObj = new Date(movie.data.screeningDate);
-						const formattedDate = dateObj.toLocaleDateString('de-DE', {
-							weekday: 'short',
-							day: '2-digit',
-							month: 'long',
-							year: 'numeric',
-						});
-
-						return (
-							<article 
-								class="movie-card card" 
-								id={`film-${movie.id}`}
-								data-month={movie.data.month || ''}
-							>
-								<div class="movie-poster-wrap">
-									<img 
-										src={movie.data.heroImage || '/images/programm/casablanca.jpg'} 
-										alt={`Filmplakat ${movie.data.title}`} 
-										loading="lazy"
-										class="movie-poster"
-									/>
-									<div class="movie-date-badge">
-										<span class="date-day">{dateObj.getDate()}</span>
-										<span class="date-month">{dateObj.toLocaleDateString('de-DE', { month: 'short' })}</span>
-									</div>
-								</div>
-
-								<div class="movie-card-body">
-									<div class="movie-badges">
-										{movie.data.fsk && <span class="badge badge-fsk">{movie.data.fsk}</span>}
-										{movie.data.genre && <span class="badge">{movie.data.genre.split('/')[0]}</span>}
-										{movie.data.highlight && <span class="badge badge-gold">Tipp</span>}
-									</div>
-
-									<h3 class="movie-title">{movie.data.title}</h3>
-
-									<div class="movie-details-line">
-										<span class="movie-time">🕒 {movie.data.time}</span>
-										{movie.data.duration && <span class="movie-runtime">⏳ {movie.data.duration}</span>}
-									</div>
-
-									<div class="movie-credits">
-										{movie.data.director && <span><strong>Regie:</strong> {movie.data.director}</span>}
-										{movie.data.year && <span> ({movie.data.year})</span>}
-										{movie.data.country && <span> &bull; {movie.data.country}</span>}
-									</div>
-
-									{movie.data.language && (
-										<p class="movie-language">🗣️ {movie.data.language}</p>
-									)}
-
-									<p class="movie-summary">{movie.data.description}</p>
-
-									{movie.data.specialNote && (
-										<div class="movie-special-box">
-											⭐ {movie.data.specialNote}
-										</div>
-									)}
-
-									<div class="movie-card-actions">
-										<a href={`/programm#edit-${movie.id}`} class="btn btn-secondary btn-sm" title="Im geschützten Programmbereich bearbeiten">
-											✏️ Film bearbeiten
-										</a>
-										<span class="admission-hint">Einlass ab {movie.data.time.replace(/([0-9]{2}):([0-9]{2}).*/, (_, h, m) => {
-											const d = new Date();
-											d.setHours(parseInt(h, 10), parseInt(m, 10) - 45);
-											return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')} Uhr`;
-										})}</span>
-									</div>
-								</div>
-							</article>
-						);
-					})}
-				</div>
-			</section>
-
-			<!-- Vereinszweck Section -->
-			<section class="section-verein">
-				<div class="section-verein-inner card">
-					<div class="verein-header">
-						<span class="sub-heading">Unsere Mission & Satzung</span>
-						<h2>Der Verein & unser Vereinszweck</h2>
-					</div>
-					
-					<div class="verein-content-grid">
-						<div class="verein-text">
-							<p>
-								Der Verein <strong>Lichtspielfreunde e.V.</strong> verfolgt ausschließlich und unmittelbar gemeinnützige 
-								Zwecke im Sinne des Abschnitts „Steuerbegünstigte Zwecke“ der Abgabenordnung. Unser Zweck ist die 
-								<strong>Förderung von Kunst und Kultur</strong>, insbesondere die Pflege der Filmkunst und die Belebung der 
-								regionalen Kinolandschaft.
-							</p>
-							<p>
-								In Zeiten von Streamingdiensten und standardisiertem Blockbuster-Kino schaffen wir einen geschützten Raum 
-								für cineastische Vielfalt:
-							</p>
-							<ul class="purpose-list">
-								<li>
-									<strong>Arthouse & Weltkino:</strong> Wir zeigen Filme, die im regulären Kinobetrieb selten oder gar nicht zu sehen sind.
-								</li>
-								<li>
-									<strong>Klassiker & Filmgeschichte:</strong> Pflege des filmischen Erbes – wann immer möglich in sorgfältig restaurierten Fassungen und im Originalton.
-								</li>
-								<li>
-									<strong>Diskurs & Vermittlung:</strong> Einführungsvorträge, Publikumsgespräche mit Filmemacher:innen und filmhistorische Einordnungen.
-								</li>
-								<li>
-									<strong>Gemeinschaft:</strong> Ein Kino ist für uns kein anonymer Konsumort, sondern ein lebendiger Treffpunkt für Menschen, die Filme lieben.
-								</li>
-							</ul>
-						</div>
-
-						<div class="verein-highlight-box">
-							<div class="quote-card">
-								<span class="quote-mark">„</span>
-								<p class="quote-text">
-									Ein Film ist kein Produkt, sondern ein Fenster zur Welt. Im dunklen Saal 
-									sitzen Menschen zusammen, lachen, weinen und denken gemeinsam nach. 
-									Dieses Erlebnis wollen wir für kommende Generationen bewahren.
-								</p>
-								<div class="quote-author">Aus der Satzung der Lichtspielfreunde e.V.</div>
-							</div>
-
-							<div class="stats-grid">
-								<div class="stat-item">
-									<span class="stat-number">24+</span>
-									<span class="stat-label">Vorführungen / Jahr</span>
-								</div>
-								<div class="stat-item">
-									<span class="stat-number">180+</span>
-									<span class="stat-label">Aktive Mitglieder</span>
-								</div>
-								<div class="stat-item">
-									<span class="stat-number">35mm</span>
-									<span class="stat-label">& 4K Projektion</span>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-
-			<!-- Vorstand Section -->
-			<section class="section-vorstand">
-				<div class="section-header">
-					<span class="sub-heading">Ehrenamtlich & Engagiert</span>
-					<h2>Unser Vorstand</h2>
-					<p class="section-intro">
-						Die Lichtspielfreunde e.V. werden von einem ehrenamtlichen Vorstandsteam geführt, 
-						das Programmplanung, Kinotechnik, Finanzen und Vereinsaktivitäten mit großer Begeisterung koordiniert.
-					</p>
-				</div>
-
-				<div class="vorstand-grid">
-					{vorstand.map((member) => (
-						<div class="vorstand-card card">
-							<div class="vorstand-avatar">
-								<img src={member.image} alt={member.name} />
-							</div>
-							<div class="vorstand-info">
-								<h3 class="vorstand-name">{member.name}</h3>
-								<div class="vorstand-role">{member.role}</div>
-								<p class="vorstand-bio">{member.bio}</p>
-							</div>
-						</div>
-					))}
-				</div>
-			</section>
-
-			<!-- Call to Action Banner -->
-			<section class="cta-banner card">
-				<div class="cta-content">
-					<h2>Werden Sie Teil der Lichtspielfreunde</h2>
-					<p>
-						Als Mitglied unterstützen Sie nicht nur die cineastische Kultur vor Ort, sondern genießen freien Eintritt 
-						zu unseren Vereinsvorstellungen, Vergünstigungen und Einladungen zu exklusiven Vorpremieren.
-					</p>
-					<div class="cta-buttons">
-						<a href="/mitglied-werden" class="btn btn-primary">Jetzt Mitglied werden</a>
-						<a href="/kontakt" class="btn btn-secondary">Fragen an den Vorstand</a>
-					</div>
-				</div>
-			</section>
-		</main>
-
-		<Footer />
-		<CookieBanner />
-
-		<!-- Interactive Month Filter Script -->
-		<script>
-			const filterPills = document.querySelectorAll<HTMLButtonElement>('.filter-pill');
-			const movieCards = document.querySelectorAll<HTMLElement>('.movie-card');
-
-			filterPills.forEach((pill) => {
-				pill.addEventListener('click', () => {
-					filterPills.forEach((p) => p.classList.remove('active'));
-					pill.classList.add('active');
-
-					const filterValue = pill.dataset.filter;
-
-					movieCards.forEach((card) => {
-						if (filterValue === 'all' || card.dataset.month === filterValue) {
-							card.style.display = 'grid';
-						} else {
-							card.style.display = 'none';
-						}
-					});
-				});
-			});
-		</script>
-
-		<style>
-			/* Hero */
-			.hero-section {
-				text-align: center;
-				padding: 3rem 1rem 4rem;
-				max-width: 860px;
-				margin: 0 auto;
-			}
-
-			.hero-badge {
-				display: inline-block;
-				background: rgba(229, 169, 60, 0.15);
-				color: var(--gold-light);
-				border: 1px solid rgba(229, 169, 60, 0.35);
-				padding: 0.35rem 1rem;
-				border-radius: 9999px;
-				font-size: 0.85rem;
-				font-weight: 600;
-				letter-spacing: 0.05em;
-				text-transform: uppercase;
-				margin-bottom: 1.5rem;
-			}
-
-			.hero-title {
-				margin-bottom: 1.5rem;
-			}
-
-			.hero-subtitle {
-				font-size: 1.15rem;
-				line-height: 1.7;
-				color: var(--text-secondary);
-				margin-bottom: 2.2rem;
-			}
-
-			.hero-actions {
-				display: flex;
-				justify-content: center;
-				gap: 1rem;
-				flex-wrap: wrap;
-			}
-
-			/* Highlight Banner */
-			.highlight-banner {
-				display: grid;
-				grid-template-columns: 320px 1fr;
-				gap: 2rem;
-				padding: 1.75rem;
-				margin-bottom: 4.5rem;
-				border-color: rgba(229, 169, 60, 0.4);
-				background: linear-gradient(135deg, #181d2c 0%, #111420 100%);
-			}
-
-			.highlight-img {
-				width: 100%;
-				height: 100%;
-				max-height: 400px;
-				object-fit: cover;
-				border-radius: var(--radius-sm);
-			}
-
-			.highlight-content-col {
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-			}
-
-			.badge-row {
-				display: flex;
-				gap: 0.5rem;
-				flex-wrap: wrap;
-				margin-bottom: 0.75rem;
-			}
-
-			.highlight-title {
-				font-size: 2rem;
-				margin-bottom: 0.5rem;
-				color: #fff;
-			}
-
-			.highlight-meta {
-				font-size: 0.95rem;
-				color: var(--text-muted);
-				margin-bottom: 1rem;
-				line-height: 1.6;
-			}
-
-			.highlight-desc {
-				font-size: 1.05rem;
-				line-height: 1.6;
-				margin-bottom: 1.25rem;
-			}
-
-			.special-note {
-				background: rgba(229, 169, 60, 0.1);
-				border-left: 3px solid var(--gold);
-				padding: 0.75rem 1rem;
-				font-size: 0.9rem;
-				color: var(--gold-light);
-				margin-bottom: 1.25rem;
-				border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-			}
-
-			.highlight-footer {
-				display: flex;
-				align-items: center;
-				gap: 1.25rem;
-			}
-
-			.location-tag {
-				font-size: 0.88rem;
-				color: var(--text-muted);
-			}
-
-			/* Program Section */
-			.section-programm {
-				margin-bottom: 5rem;
-				scroll-margin-top: 5rem;
-			}
-
-			.section-header {
-				text-align: center;
-				max-width: 760px;
-				margin: 0 auto 2.5rem;
-			}
-
-			.sub-heading {
-				display: block;
-				font-size: 0.85rem;
-				font-weight: 700;
-				letter-spacing: 0.1em;
-				text-transform: uppercase;
-				color: var(--gold);
-				margin-bottom: 0.5rem;
-			}
-
-			.section-intro {
-				font-size: 1.05rem;
-				color: var(--text-secondary);
-			}
-
-			.filter-bar {
-				display: flex;
-				justify-content: center;
-				gap: 0.5rem;
-				margin-top: 1.75rem;
-				flex-wrap: wrap;
-			}
-
-			.filter-pill {
-				background: var(--bg-surface-elevated);
-				border: 1px solid var(--border-subtle);
-				color: var(--text-secondary);
-				padding: 0.5rem 1rem;
-				border-radius: 9999px;
-				font-size: 0.9rem;
-				cursor: pointer;
-				font-family: inherit;
-				transition: all 0.2s ease;
-			}
-
-			.filter-pill:hover {
-				color: #fff;
-				border-color: var(--gold);
-			}
-
-			.filter-pill.active {
-				background: var(--gold);
-				color: #0c0e14;
-				border-color: var(--gold);
-				font-weight: 600;
-			}
-
-			/* Movies Grid */
-			.movies-grid {
-				display: grid;
-				grid-template-columns: repeat(2, 1fr);
-				gap: 2rem;
-			}
-
-			.movie-card {
-				display: grid;
-				grid-template-columns: 160px 1fr;
-				gap: 1.25rem;
-				padding: 1.25rem;
-				background: var(--bg-surface);
-			}
-
-			.movie-poster-wrap {
-				position: relative;
-			}
-
-			.movie-poster {
-				width: 100%;
-				height: 220px;
-				object-fit: cover;
-				border-radius: var(--radius-sm);
-			}
-
-			.movie-date-badge {
-				position: absolute;
-				top: 0.5rem;
-				left: 0.5rem;
-				background: rgba(12, 14, 20, 0.9);
-				border: 1px solid var(--gold);
-				border-radius: 6px;
-				padding: 0.2rem 0.5rem;
-				text-align: center;
-				display: flex;
-				flex-direction: column;
-			}
-
-			.date-day {
-				font-size: 1.15rem;
-				font-weight: 700;
-				color: var(--gold-light);
-				line-height: 1;
-			}
-
-			.date-month {
-				font-size: 0.68rem;
-				text-transform: uppercase;
-				font-weight: 600;
-				color: #fff;
-			}
-
-			.movie-card-body {
-				display: flex;
-				flex-direction: column;
-			}
-
-			.movie-badges {
-				display: flex;
-				gap: 0.4rem;
-				margin-bottom: 0.4rem;
-				flex-wrap: wrap;
-			}
-
-			.movie-title {
-				font-size: 1.35rem;
-				margin-bottom: 0.35rem;
-				color: #fff;
-			}
-
-			.movie-details-line {
-				display: flex;
-				gap: 1rem;
-				font-size: 0.85rem;
-				color: var(--gold-light);
-				font-weight: 600;
-				margin-bottom: 0.35rem;
-			}
-
-			.movie-credits {
-				font-size: 0.85rem;
-				color: var(--text-muted);
-				margin-bottom: 0.4rem;
-			}
-
-			.movie-language {
-				font-size: 0.82rem;
-				color: var(--text-secondary);
-				margin-bottom: 0.6rem;
-			}
-
-			.movie-summary {
-				font-size: 0.9rem;
-				line-height: 1.5;
-				color: var(--text-secondary);
-				margin-bottom: 0.85rem;
-				flex: 1;
-			}
-
-			.movie-special-box {
-				background: rgba(229, 169, 60, 0.08);
-				border-radius: 4px;
-				padding: 0.4rem 0.6rem;
-				font-size: 0.82rem;
-				color: var(--gold-light);
-				margin-bottom: 0.85rem;
-			}
-
-			.movie-card-actions {
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				margin-top: auto;
-				padding-top: 0.6rem;
-				border-top: 1px solid var(--border-subtle);
-			}
-
-			.admission-hint {
-				font-size: 0.78rem;
-				color: var(--text-muted);
-			}
-
-			/* Verein Section */
-			.section-verein {
-				margin-bottom: 5rem;
-			}
-
-			.section-verein-inner {
-				padding: 2.5rem;
-				background: linear-gradient(180deg, #141824 0%, #11141e 100%);
-			}
-
-			.verein-header {
-				text-align: center;
-				max-width: 650px;
-				margin: 0 auto 2.5rem;
-			}
-
-			.verein-content-grid {
-				display: grid;
-				grid-template-columns: 1.2fr 0.8fr;
-				gap: 2.5rem;
-				align-items: center;
-			}
-
-			.purpose-list {
-				list-style: none;
-				padding: 0;
-				margin: 1.5rem 0 0;
-				display: flex;
-				flex-direction: column;
-				gap: 1rem;
-			}
-
-			.purpose-list li {
-				position: relative;
-				padding-left: 1.5rem;
-			}
-
-			.purpose-list li::before {
-				content: "✦";
-				position: absolute;
-				left: 0;
-				color: var(--gold);
-			}
-
-			.quote-card {
-				background: rgba(0, 0, 0, 0.35);
-				border: 1px solid var(--border-subtle);
-				border-radius: var(--radius-md);
-				padding: 1.75rem;
-				position: relative;
-				margin-bottom: 1.5rem;
-			}
-
-			.quote-mark {
-				font-size: 3.5rem;
-				font-family: serif;
-				color: var(--gold);
-				line-height: 0.8;
-				opacity: 0.4;
-				display: block;
-				margin-bottom: 0.5rem;
-			}
-
-			.quote-text {
-				font-style: italic;
-				font-size: 1.05rem;
-				line-height: 1.6;
-				color: #fff;
-				margin-bottom: 0.8rem;
-			}
-
-			.quote-author {
-				font-size: 0.85rem;
-				color: var(--gold-light);
-				font-weight: 600;
-			}
-
-			.stats-grid {
-				display: grid;
-				grid-template-columns: repeat(3, 1fr);
-				gap: 1rem;
-				text-align: center;
-			}
-
-			.stat-item {
-				background: rgba(0, 0, 0, 0.25);
-				border: 1px solid var(--border-subtle);
-				border-radius: var(--radius-sm);
-				padding: 0.85rem 0.5rem;
-			}
-
-			.stat-number {
-				display: block;
-				font-size: 1.5rem;
-				font-weight: 700;
-				color: var(--gold-light);
-			}
-
-			.stat-label {
-				font-size: 0.75rem;
-				color: var(--text-muted);
-			}
-
-			/* Vorstand */
-			.section-vorstand {
-				margin-bottom: 5rem;
-			}
-
-			.vorstand-grid {
-				display: grid;
-				grid-template-columns: repeat(4, 1fr);
-				gap: 1.5rem;
-			}
-
-			.vorstand-card {
-				padding: 1.25rem;
-				text-align: center;
-			}
-
-			.vorstand-avatar img {
-				width: 96px;
-				height: 96px;
-				border-radius: 50%;
-				object-fit: cover;
-				margin: 0 auto 1rem;
-				border: 2px solid var(--gold);
-			}
-
-			.vorstand-name {
-				font-size: 1.1rem;
-				margin-bottom: 0.25rem;
-				color: #fff;
-			}
-
-			.vorstand-role {
-				font-size: 0.82rem;
-				font-weight: 600;
-				color: var(--gold);
-				text-transform: uppercase;
-				letter-spacing: 0.05em;
-				margin-bottom: 0.75rem;
-			}
-
-			.vorstand-bio {
-				font-size: 0.86rem;
-				color: var(--text-secondary);
-				line-height: 1.5;
-				margin: 0;
-			}
-
-			/* CTA Banner */
-			.cta-banner {
-				text-align: center;
-				padding: 3rem 1.5rem;
-				background: linear-gradient(135deg, #1b2030 0%, #121522 100%);
-				border-color: rgba(229, 169, 60, 0.35);
-			}
-
-			.cta-content {
-				max-width: 650px;
-				margin: 0 auto;
-			}
-
-			.cta-content h2 {
-				font-size: 2rem;
-				margin-bottom: 1rem;
-			}
-
-			.cta-content p {
-				font-size: 1.05rem;
-				margin-bottom: 1.75rem;
-			}
-
-			.cta-buttons {
-				display: flex;
-				justify-content: center;
-				gap: 1rem;
-				flex-wrap: wrap;
-			}
-
-			/* Responsive */
-			@media (max-width: 960px) {
-				.highlight-banner {
-					grid-template-columns: 1fr;
-				}
-
-				.movies-grid {
-					grid-template-columns: 1fr;
-				}
-
-				.verein-content-grid {
-					grid-template-columns: 1fr;
-				}
-
-				.vorstand-grid {
-					grid-template-columns: repeat(2, 1fr);
-				}
-			}
-
-			@media (max-width: 640px) {
-				.movie-card {
-					grid-template-columns: 1fr;
-				}
-
-				.movie-poster {
-					height: 280px;
-				}
-
-				.vorstand-grid {
-					grid-template-columns: 1fr;
-				}
-			}
-		</style>
-	</body>
+  <head>
+    <BaseHead
+      title={`${SITE_TITLE} – ${SITE_TAGLINE}`}
+      description={SITE_DESCRIPTION}
+    />
+  </head>
+  <body>
+    <Header />
+
+    <main>
+      <!-- Hero Section -->
+      <section class="hero-section">
+        <div class="hero-badge">Gemeinnütziger Kino-Verein</div>
+        <h1 class="hero-title">
+          Kino erleben.
+          <br />
+          <span class="text-gold">Gemeinschaft spüren.</span>
+          <br />
+          Filmkunst fördern.
+        </h1>
+        <p class="hero-subtitle">
+          Willkommen bei den <strong>Lichtspielfreunden e.V.</strong> Wir
+          bringen Arthouse-Perlen, unvergessliche Filmklassiker, bewegende
+          Dokumentationen und cineastische Entdeckungen auf die große Leinwand
+          in unserem kleinen Kino– mit Leidenschaft, persönlicher Einführung und
+          Raum für Gespräche.
+        </p>
+        <div class="hero-actions">
+          <a href="#programm" class="btn btn-primary">
+            <svg
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              width="18"
+              height="18"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            Aktuelles Kinoprogramm
+          </a>
+          <a href="/mitglied-werden" class="btn btn-secondary">
+            Werden Sie Mitglied
+          </a>
+        </div>
+      </section>
+
+      <!-- Highlight Movie Banner (if available) -->
+      {highlightMovie && (
+        <section class="highlight-banner card">
+          <div class="highlight-image-col">
+            <img
+              src={
+                highlightMovie.data.heroImage ||
+                "/images/programm/casablanca.jpg"
+              }
+              alt={`Filmplakat ${highlightMovie.data.title}`}
+              class="highlight-img"
+            />
+          </div>
+          <div class="highlight-content-col">
+            <div class="badge-row">
+              <span class="badge badge-gold">Besonderes Highlight</span>
+              {highlightMovie.data.fsk && (
+                <span class="badge badge-fsk">{highlightMovie.data.fsk}</span>
+              )}
+              {highlightMovie.data.genre && (
+                <span class="badge">{highlightMovie.data.genre}</span>
+              )}
+            </div>
+            <h2 class="highlight-title">{highlightMovie.data.title}</h2>
+            <p class="highlight-meta">
+              <strong>Datum:</strong>{" "}
+              {getMovieDate(highlightMovie).toLocaleDateString("de-DE", {
+                weekday: "long",
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+              })}{" "}
+              um {highlightMovie.data.time || "20:00"}
+              <br />
+              {highlightMovie.data.director && (
+                <span>
+                  <strong>Regie:</strong> {highlightMovie.data.director}{" "}
+                  &bull;{" "}
+                </span>
+              )}
+              {highlightMovie.data.year && (
+                <span>{highlightMovie.data.year} &bull; </span>
+              )}
+              {highlightMovie.data.duration && (
+                <span>{highlightMovie.data.duration}</span>
+              )}
+            </p>
+            <p class="highlight-desc">{highlightMovie.data.description}</p>
+            {highlightMovie.data.specialNote && (
+              <div class="special-note">
+                <strong>Besonderheit:</strong> {highlightMovie.data.specialNote}
+              </div>
+            )}
+            <div class="highlight-footer">
+              <a
+                href={`#film-${highlightMovie.id}`}
+                class="btn btn-primary btn-sm"
+              >
+                Details & Inhaltsangabe
+              </a>
+              <span class="location-tag">
+                📍 {highlightMovie.data.location}
+              </span>
+            </div>
+          </div>
+        </section>
+      )}
+
+      <!-- Kinoprogramm Section -->
+      <section id="programm" class="section-programm">
+        <div class="section-header">
+          <span class="sub-heading">Ausgewählte Filmperlen</span>
+          <h2>Kinoprogramm des nächsten Quartals</h2>
+          <p class="section-intro">
+            Unser Kuratorium hat für die kommenden Monate ein vielseitiges
+            Programm zusammengestellt: von restaurierten 35mm-Klassikern bis hin
+            zu preisgekrönten internationalen Meisterwerken der Gegenwart.
+          </p>
+
+          <!-- Month Filter Pills -->
+          {months.length > 0 && (
+            <div
+              class="filter-bar"
+              role="tablist"
+              aria-label="Programm nach Monat filtern"
+            >
+              <button
+                type="button"
+                class="filter-pill active"
+                data-filter="all"
+              >
+                Alle Vorführungen ({sortedMovies.length})
+              </button>
+              {months.map((m) => (
+                <button type="button" class="filter-pill" data-filter={m}>
+                  {m}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <!-- Movie Cards Grid -->
+        <div class="movies-grid">
+          {sortedMovies.map((movie) => {
+            const dateObj = getMovieDate(movie);
+            const formattedDate = dateObj.toLocaleDateString("de-DE", {
+              weekday: "short",
+              day: "2-digit",
+              month: "long",
+              year: "numeric",
+            });
+
+            return (
+              <article
+                class="movie-card card"
+                id={`film-${movie.id}`}
+                data-month={movie.data.month || ""}
+              >
+                <div class="movie-poster-wrap">
+                  <img
+                    src={
+                      movie.data.heroImage || "/images/programm/casablanca.jpg"
+                    }
+                    alt={`Filmplakat ${movie.data.title}`}
+                    loading="lazy"
+                    class="movie-poster"
+                  />
+                  <div class="movie-date-badge">
+                    <span class="date-day">{dateObj.getDate()}</span>
+                    <span class="date-month">
+                      {dateObj.toLocaleDateString("de-DE", { month: "short" })}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="movie-card-body">
+                  <div class="movie-badges">
+                    {movie.data.fsk && (
+                      <span class="badge badge-fsk">{movie.data.fsk}</span>
+                    )}
+                    {movie.data.genre && (
+                      <span class="badge">
+                        {movie.data.genre.split("/")[0]}
+                      </span>
+                    )}
+                    {movie.data.highlight && (
+                      <span class="badge badge-gold">Tipp</span>
+                    )}
+                  </div>
+
+                  <h3 class="movie-title">{movie.data.title}</h3>
+
+                  <div class="movie-details-line">
+                    <span class="movie-time">🕒 {movie.data.time}</span>
+                    {movie.data.duration && (
+                      <span class="movie-runtime">
+                        ⏳ {movie.data.duration}
+                      </span>
+                    )}
+                  </div>
+
+                  <div class="movie-credits">
+                    {movie.data.director && (
+                      <span>
+                        <strong>Regie:</strong> {movie.data.director}
+                      </span>
+                    )}
+                    {movie.data.year && <span> ({movie.data.year})</span>}
+                    {movie.data.country && (
+                      <span> &bull; {movie.data.country}</span>
+                    )}
+                  </div>
+
+                  {movie.data.language && (
+                    <p class="movie-language">🗣️ {movie.data.language}</p>
+                  )}
+
+                  <p class="movie-summary">{movie.data.description}</p>
+
+                  {movie.data.specialNote && (
+                    <div class="movie-special-box">
+                      ⭐ {movie.data.specialNote}
+                    </div>
+                  )}
+
+                  <div class="movie-card-actions">
+                    <a
+                      href={`/programm#edit-${movie.id}`}
+                      class="btn btn-secondary btn-sm"
+                      title="Im geschützten Programmbereich bearbeiten"
+                    >
+                      ✏️ Film bearbeiten
+                    </a>
+                    <span class="admission-hint">
+                      Einlass ab{" "}
+                      {movie.data.time?.replace(
+                        /([0-9]{2}):([0-9]{2}).*/,
+                        (_, h, m) => {
+                          const d = new Date();
+                          d.setHours(parseInt(h, 10), parseInt(m, 10) - 45);
+                          return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")} Uhr`;
+                        },
+                      )}
+                    </span>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      <!-- Vereinszweck Section -->
+      <section class="section-verein">
+        <div class="section-verein-inner card">
+          <div class="verein-header">
+            <span class="sub-heading">Unsere Mission & Satzung</span>
+            <h2>Der Verein & unser Vereinszweck</h2>
+          </div>
+
+          <div class="verein-content-grid">
+            <div class="verein-text">
+              <p>
+                Der Verein <strong>Lichtspielfreunde e.V.</strong> verfolgt
+                ausschließlich und unmittelbar gemeinnützige Zwecke im Sinne des
+                Abschnitts „Steuerbegünstigte Zwecke“ der Abgabenordnung. Unser
+                Zweck ist die
+                <strong>Förderung von Kunst und Kultur</strong>, insbesondere
+                die Pflege der Filmkunst und die Belebung der regionalen
+                Kinolandschaft.
+              </p>
+              <p>
+                In Zeiten von Streamingdiensten und standardisiertem
+                Blockbuster-Kino schaffen wir einen geschützten Raum für
+                cineastische Vielfalt:
+              </p>
+              <ul class="purpose-list">
+                <li>
+                  <strong>Arthouse & Weltkino:</strong> Wir zeigen Filme, die im
+                  regulären Kinobetrieb selten oder gar nicht zu sehen sind.
+                </li>
+                <li>
+                  <strong>Klassiker & Filmgeschichte:</strong> Pflege des
+                  filmischen Erbes – wann immer möglich in sorgfältig
+                  restaurierten Fassungen und im Originalton.
+                </li>
+                <li>
+                  <strong>Diskurs & Vermittlung:</strong> Einführungsvorträge,
+                  Publikumsgespräche mit Filmemacher:innen und filmhistorische
+                  Einordnungen.
+                </li>
+                <li>
+                  <strong>Gemeinschaft:</strong> Ein Kino ist für uns kein
+                  anonymer Konsumort, sondern ein lebendiger Treffpunkt für
+                  Menschen, die Filme lieben.
+                </li>
+              </ul>
+            </div>
+
+            <div class="verein-highlight-box">
+              <div class="quote-card">
+                <span class="quote-mark">„</span>
+                <p class="quote-text">
+                  Ein Film ist kein Produkt, sondern ein Fenster zur Welt. Im
+                  dunklen Saal sitzen Menschen zusammen, lachen, weinen und
+                  denken gemeinsam nach. Dieses Erlebnis wollen wir für kommende
+                  Generationen bewahren.
+                </p>
+                <div class="quote-author">
+                  Aus der Satzung der Lichtspielfreunde e.V.
+                </div>
+              </div>
+
+              <div class="stats-grid">
+                <div class="stat-item">
+                  <span class="stat-number">24+</span>
+                  <span class="stat-label">Vorführungen / Jahr</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-number">180+</span>
+                  <span class="stat-label">Aktive Mitglieder</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-number">35mm</span>
+                  <span class="stat-label">& 4K Projektion</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Vorstand Section -->
+      <section class="section-vorstand">
+        <div class="section-header">
+          <span class="sub-heading">Ehrenamtlich & Engagiert</span>
+          <h2>Unser Vorstand</h2>
+          <p class="section-intro">
+            Die Lichtspielfreunde e.V. werden von einem ehrenamtlichen
+            Vorstandsteam geführt, das Programmplanung, Kinotechnik, Finanzen
+            und Vereinsaktivitäten mit großer Begeisterung koordiniert.
+          </p>
+        </div>
+
+        <div class="vorstand-grid">
+          {vorstand.map((member) => (
+            <div class="vorstand-card card">
+              <div class="vorstand-avatar">
+                <img src={member.image} alt={member.name} />
+              </div>
+              <div class="vorstand-info">
+                <h3 class="vorstand-name">{member.name}</h3>
+                <div class="vorstand-role">{member.role}</div>
+                <p class="vorstand-bio">{member.bio}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Call to Action Banner -->
+      <section class="cta-banner card">
+        <div class="cta-content">
+          <h2>Werden Sie Teil der Lichtspielfreunde</h2>
+          <p>
+            Als Mitglied unterstützen Sie nicht nur die cineastische Kultur vor
+            Ort, sondern genießen freien Eintritt zu unseren
+            Vereinsvorstellungen, Vergünstigungen und Einladungen zu exklusiven
+            Vorpremieren.
+          </p>
+          <div class="cta-buttons">
+            <a href="/mitglied-werden" class="btn btn-primary">
+              Jetzt Mitglied werden
+            </a>
+            <a href="/kontakt" class="btn btn-secondary">
+              Fragen an den Vorstand
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <Footer />
+    <CookieBanner />
+
+    <!-- Interactive Month Filter Script -->
+    <script>
+      const filterPills =
+        document.querySelectorAll<HTMLButtonElement>(".filter-pill");
+      const movieCards = document.querySelectorAll<HTMLElement>(".movie-card");
+
+      filterPills.forEach((pill) => {
+        pill.addEventListener("click", () => {
+          filterPills.forEach((p) => p.classList.remove("active"));
+          pill.classList.add("active");
+
+          const filterValue = pill.dataset.filter;
+
+          movieCards.forEach((card) => {
+            if (filterValue === "all" || card.dataset.month === filterValue) {
+              card.style.display = "grid";
+            } else {
+              card.style.display = "none";
+            }
+          });
+        });
+      });
+    </script>
+
+    <style>
+      /* Hero */
+      .hero-section {
+        text-align: center;
+        padding: 3rem 1rem 4rem;
+        max-width: 860px;
+        margin: 0 auto;
+      }
+
+      .hero-badge {
+        display: inline-block;
+        background: rgba(229, 169, 60, 0.15);
+        color: var(--gold-light);
+        border: 1px solid rgba(229, 169, 60, 0.35);
+        padding: 0.35rem 1rem;
+        border-radius: 9999px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin-bottom: 1.5rem;
+      }
+
+      .hero-title {
+        margin-bottom: 1.5rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1.15rem;
+        line-height: 1.7;
+        color: var(--text-secondary);
+        margin-bottom: 2.2rem;
+      }
+
+      .hero-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      /* Highlight Banner */
+      .highlight-banner {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: 2rem;
+        padding: 1.75rem;
+        margin-bottom: 4.5rem;
+        border-color: rgba(229, 169, 60, 0.4);
+        background: linear-gradient(135deg, #181d2c 0%, #111420 100%);
+      }
+
+      .highlight-img {
+        width: 100%;
+        height: 100%;
+        max-height: 400px;
+        object-fit: cover;
+        border-radius: var(--radius-sm);
+      }
+
+      .highlight-content-col {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .badge-row {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.75rem;
+      }
+
+      .highlight-title {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        color: #fff;
+      }
+
+      .highlight-meta {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        margin-bottom: 1rem;
+        line-height: 1.6;
+      }
+
+      .highlight-desc {
+        font-size: 1.05rem;
+        line-height: 1.6;
+        margin-bottom: 1.25rem;
+      }
+
+      .special-note {
+        background: rgba(229, 169, 60, 0.1);
+        border-left: 3px solid var(--gold);
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+        color: var(--gold-light);
+        margin-bottom: 1.25rem;
+        border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      }
+
+      .highlight-footer {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+      }
+
+      .location-tag {
+        font-size: 0.88rem;
+        color: var(--text-muted);
+      }
+
+      /* Program Section */
+      .section-programm {
+        margin-bottom: 5rem;
+        scroll-margin-top: 5rem;
+      }
+
+      .section-header {
+        text-align: center;
+        max-width: 760px;
+        margin: 0 auto 2.5rem;
+      }
+
+      .sub-heading {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 0.5rem;
+      }
+
+      .section-intro {
+        font-size: 1.05rem;
+        color: var(--text-secondary);
+      }
+
+      .filter-bar {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 1.75rem;
+        flex-wrap: wrap;
+      }
+
+      .filter-pill {
+        background: var(--bg-surface-elevated);
+        border: 1px solid var(--border-subtle);
+        color: var(--text-secondary);
+        padding: 0.5rem 1rem;
+        border-radius: 9999px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.2s ease;
+      }
+
+      .filter-pill:hover {
+        color: #fff;
+        border-color: var(--gold);
+      }
+
+      .filter-pill.active {
+        background: var(--gold);
+        color: #0c0e14;
+        border-color: var(--gold);
+        font-weight: 600;
+      }
+
+      /* Movies Grid */
+      .movies-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+      }
+
+      .movie-card {
+        display: grid;
+        grid-template-columns: 160px 1fr;
+        gap: 1.25rem;
+        padding: 1.25rem;
+        background: var(--bg-surface);
+      }
+
+      .movie-poster-wrap {
+        position: relative;
+      }
+
+      .movie-poster {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        border-radius: var(--radius-sm);
+      }
+
+      .movie-date-badge {
+        position: absolute;
+        top: 0.5rem;
+        left: 0.5rem;
+        background: rgba(12, 14, 20, 0.9);
+        border: 1px solid var(--gold);
+        border-radius: 6px;
+        padding: 0.2rem 0.5rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .date-day {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--gold-light);
+        line-height: 1;
+      }
+
+      .date-month {
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        font-weight: 600;
+        color: #fff;
+      }
+
+      .movie-card-body {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .movie-badges {
+        display: flex;
+        gap: 0.4rem;
+        margin-bottom: 0.4rem;
+        flex-wrap: wrap;
+      }
+
+      .movie-title {
+        font-size: 1.35rem;
+        margin-bottom: 0.35rem;
+        color: #fff;
+      }
+
+      .movie-details-line {
+        display: flex;
+        gap: 1rem;
+        font-size: 0.85rem;
+        color: var(--gold-light);
+        font-weight: 600;
+        margin-bottom: 0.35rem;
+      }
+
+      .movie-credits {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin-bottom: 0.4rem;
+      }
+
+      .movie-language {
+        font-size: 0.82rem;
+        color: var(--text-secondary);
+        margin-bottom: 0.6rem;
+      }
+
+      .movie-summary {
+        font-size: 0.9rem;
+        line-height: 1.5;
+        color: var(--text-secondary);
+        margin-bottom: 0.85rem;
+        flex: 1;
+      }
+
+      .movie-special-box {
+        background: rgba(229, 169, 60, 0.08);
+        border-radius: 4px;
+        padding: 0.4rem 0.6rem;
+        font-size: 0.82rem;
+        color: var(--gold-light);
+        margin-bottom: 0.85rem;
+      }
+
+      .movie-card-actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: auto;
+        padding-top: 0.6rem;
+        border-top: 1px solid var(--border-subtle);
+      }
+
+      .admission-hint {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+      }
+
+      /* Verein Section */
+      .section-verein {
+        margin-bottom: 5rem;
+      }
+
+      .section-verein-inner {
+        padding: 2.5rem;
+        background: linear-gradient(180deg, #141824 0%, #11141e 100%);
+      }
+
+      .verein-header {
+        text-align: center;
+        max-width: 650px;
+        margin: 0 auto 2.5rem;
+      }
+
+      .verein-content-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 2.5rem;
+        align-items: center;
+      }
+
+      .purpose-list {
+        list-style: none;
+        padding: 0;
+        margin: 1.5rem 0 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .purpose-list li {
+        position: relative;
+        padding-left: 1.5rem;
+      }
+
+      .purpose-list li::before {
+        content: "✦";
+        position: absolute;
+        left: 0;
+        color: var(--gold);
+      }
+
+      .quote-card {
+        background: rgba(0, 0, 0, 0.35);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-md);
+        padding: 1.75rem;
+        position: relative;
+        margin-bottom: 1.5rem;
+      }
+
+      .quote-mark {
+        font-size: 3.5rem;
+        font-family: serif;
+        color: var(--gold);
+        line-height: 0.8;
+        opacity: 0.4;
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+
+      .quote-text {
+        font-style: italic;
+        font-size: 1.05rem;
+        line-height: 1.6;
+        color: #fff;
+        margin-bottom: 0.8rem;
+      }
+
+      .quote-author {
+        font-size: 0.85rem;
+        color: var(--gold-light);
+        font-weight: 600;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        text-align: center;
+      }
+
+      .stat-item {
+        background: rgba(0, 0, 0, 0.25);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-sm);
+        padding: 0.85rem 0.5rem;
+      }
+
+      .stat-number {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--gold-light);
+      }
+
+      .stat-label {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+      }
+
+      /* Vorstand */
+      .section-vorstand {
+        margin-bottom: 5rem;
+      }
+
+      .vorstand-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+      }
+
+      .vorstand-card {
+        padding: 1.25rem;
+        text-align: center;
+      }
+
+      .vorstand-avatar img {
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: 0 auto 1rem;
+        border: 2px solid var(--gold);
+      }
+
+      .vorstand-name {
+        font-size: 1.1rem;
+        margin-bottom: 0.25rem;
+        color: #fff;
+      }
+
+      .vorstand-role {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--gold);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.75rem;
+      }
+
+      .vorstand-bio {
+        font-size: 0.86rem;
+        color: var(--text-secondary);
+        line-height: 1.5;
+        margin: 0;
+      }
+
+      /* CTA Banner */
+      .cta-banner {
+        text-align: center;
+        padding: 3rem 1.5rem;
+        background: linear-gradient(135deg, #1b2030 0%, #121522 100%);
+        border-color: rgba(229, 169, 60, 0.35);
+      }
+
+      .cta-content {
+        max-width: 650px;
+        margin: 0 auto;
+      }
+
+      .cta-content h2 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+
+      .cta-content p {
+        font-size: 1.05rem;
+        margin-bottom: 1.75rem;
+      }
+
+      .cta-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      /* Responsive */
+      @media (max-width: 960px) {
+        .highlight-banner {
+          grid-template-columns: 1fr;
+        }
+
+        .movies-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .verein-content-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .vorstand-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 640px) {
+        .movie-card {
+          grid-template-columns: 1fr;
+        }
+
+        .movie-poster {
+          height: 280px;
+        }
+
+        .vorstand-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .card {
+        background: rgba(20, 24, 36, 0.75);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .highlight-banner {
+        background: linear-gradient(
+          135deg,
+          rgba(24, 29, 44, 0.85) 0%,
+          rgba(17, 20, 32, 0.85) 100%
+        );
+        backdrop-filter: blur(8px);
+      }
+      body {
+        background-image:
+          linear-gradient(rgba(15, 18, 26, 0.25), rgba(15, 18, 26, 0.35)),
+          url("/images/cp%20background.png");
+        background-size: cover;
+        background-position: center top;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-color: #0f121a;
+        min-height: 100vh;
+        margin: 0;
+      }
+    </style>
+  </body>
 </html>

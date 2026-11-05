@@ -1,466 +1,206 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import CookieBanner from '../components/CookieBanner.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE, VEREIN_NAME } from '../consts';
+import BaseHead from "../components/BaseHead.astro";
+import CookieBanner from "../components/CookieBanner.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import {
+  SITE_TITLE,
+  VEREIN_NAME,
+  VEREIN_POST_CARE_OF,
+  VEREIN_POST_CITY,
+  VEREIN_POST_STREET,
+} from "../consts";
 ---
 
 <!doctype html>
 <html lang="de">
-	<head>
-		<BaseHead title={`Mitglied werden – ${SITE_TITLE}`} description={`Werden Sie Mitglied bei den ${VEREIN_NAME} und unterstützen Sie cineastische Vielfalt.`} />
-	</head>
-	<body>
-		<Header />
+  <head>
+    <BaseHead
+      title={`Mitglied werden – ${SITE_TITLE}`}
+      description={`Mitglied werden bei den ${VEREIN_NAME}. Aufnahmeantrag ausfüllen und im Vereinsheim abgeben oder per Post senden.`}
+    />
+  </head>
+  <body>
+    <Header />
 
-		<main>
-			<div class="page-header">
-				<span class="sub-heading">Gemeinschaft für Filmbegeisterte</span>
-				<h1>Werden Sie Mitglied bei den Lichtspielfreunden</h1>
-				<p class="lead-text">
-					Unser Kino lebt durch die Menschen, die es mit Begeisterung füllen. Mit Ihrer Mitgliedschaft sichern Sie 
-					die Zukunft anspruchsvoller Filmkultur in unserer Region und genießen zugleich exklusive Vorteile.
-				</p>
-			</div>
+    <main>
+      <section class="member-layout">
+        <div class="member-pdf-col">
+          <iframe
+            class="member-pdf"
+            title="Mitgliedsantrag der CP Lichtspielfreunde Hürth"
+            src="/docs/Aufnahmeantrag_Erwachsene.pdf"
+          ></iframe>
+          <a
+            class="btn btn-secondary btn-sm"
+            href="/docs/Aufnahmeantrag_Erwachsene.pdf"
+            download
+          >
+            Aufnahmeantrag als PDF herunterladen
+          </a>
+        </div>
 
-			<!-- Membership Benefits Grid -->
-			<section class="benefits-section">
-				<h2>Ihre Vorteile als Vereinsmitglied</h2>
-				<div class="benefits-grid">
-					<div class="benefit-card card">
-						<div class="benefit-icon">🎟️</div>
-						<h3>Freier Eintritt</h3>
-						<p>Kostenloser Besuch aller regulären Vereinsvorführungen und Filmreihen des laufenden Programms.</p>
-					</div>
+        <div class="member-copy-col">
+          <h1 class="script-heading">Mitglied werden</h1>
+          <p>
+            Du möchtest Mitglied bei den CP Lichtspielfreunden Hürth werden?
+          </p>
+          <p>Kein Problem ...</p>
+          <p>
+            Fülle einfach den nebenstehenden Aufnahmeantrag aus und bringe uns
+            diesen zu unseren Öffnungszeiten (Fr. ab 19 Uhr / Sa. ab 11 Uhr /
+            So. ab 13 Uhr) im Vereinsheim vorbei oder schicke ihn per Post an
+            die folgende Adresse:
+          </p>
+          <address>
+            {VEREIN_NAME}
+            <br />
+            {VEREIN_POST_CARE_OF}
+            <br />
+            {VEREIN_POST_STREET}
+            <br />
+            {VEREIN_POST_CITY}
+          </address>
+        </div>
+      </section>
 
-					<div class="benefit-card card">
-						<div class="benefit-icon">📖</div>
-						<h3>Programmheft frei Haus</h3>
-						<p>Das gedruckte Quartalsheft mit ausführlichen Filmessays und Hintergründen druckfrisch in Ihrem Briefkasten.</p>
-					</div>
+      <section class="tiers-grid">
+        <article class="tier-card card">
+          <h2>ordentliches Mitglied</h2>
+          <img
+            src="/images/mitglied/ordentliches-mitglied.jpg"
+            alt="Symbolbild für die ordentliche Mitgliedschaft"
+          />
+          <ul>
+            <li>5 € Monatsbeitrag</li>
+            <li>
+              12 mal freier Zugang zu Vereinsveranstaltung (jeder weitere Besuch
+              kostet 5 €)
+            </li>
+            <li>ermäßigter Eintritt bei öffentlichen Veranstaltungen</li>
+          </ul>
+        </article>
 
-					<div class="benefit-card card">
-						<div class="benefit-icon">🎬</div>
-						<h3>Mitbestimmung & Programmauswahl</h3>
-						<p>Stimmrecht auf der jährlichen Mitgliederversammlung und Teilnahme am offenen Programmbeirat.</p>
-					</div>
+        <article class="tier-card card">
+          <h2>Fördermitglied</h2>
+          <img
+            src="/images/mitglied/foerdermitglied.jpg"
+            alt="Symbolbild für die Fördermitgliedschaft"
+          />
+          <ul>
+            <li>20 Euro Monatsbeitrag</li>
+            <li>freier Zugang zu allen Vereinsveranstaltungen</li>
+            <li>freier Eintritt bei öffentlichen Veranstaltungen</li>
+          </ul>
+        </article>
+      </section>
+    </main>
 
-					<div class="benefit-card card">
-						<div class="benefit-icon">🥂</div>
-						<h3>Exklusive Vorpremieren</h3>
-						<p>Einladungen zu besonderen Premierenabenden mit Sektempfang und Regiegesprächen vor dem offiziellen Start.</p>
-					</div>
-				</div>
-			</section>
+    <Footer />
+    <CookieBanner />
 
-			<!-- Membership Types -->
-			<section class="tiers-section">
-				<h2>Wählen Sie Ihre Mitgliedschaft</h2>
-				<div class="tiers-grid">
-					<div class="tier-card card">
-						<div class="tier-badge">Beliebt</div>
-						<h3 class="tier-title">Ordentliches Mitglied</h3>
-						<div class="tier-price">60 € <span>/ Jahr</span></div>
-						<p class="tier-desc">Für alle Filmfreundinnen und -freunde, die unser Kino regelmäßig besuchen wollen.</p>
-						<ul class="tier-features">
-							<li>✓ Freier Eintritt zu allen Vereinsvorführungen</li>
-							<li>✓ Stimmrecht bei der Mitgliederversammlung</li>
-							<li>✓ Gedrucktes Programmheft per Post</li>
-							<li>✓ Ermäßigung für Begleitpersonen</li>
-						</ul>
-						<a href="#antrag" class="btn btn-primary" data-tier="Ordentliches Mitglied (60 €/Jahr)">Auswählen</a>
-					</div>
+    <style>
+      .member-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
+        align-items: start;
+        margin-bottom: 3.5rem;
+      }
 
-					<div class="tier-card card">
-						<div class="tier-badge-subtle">Ermäßigt</div>
-						<h3 class="tier-title">Ermäßigte Mitgliedschaft</h3>
-						<div class="tier-price">36 € <span>/ Jahr</span></div>
-						<p class="tier-desc">Für Schüler:innen, Auszubildende, Studierende, Rentner:innen und Erwerbslose.</p>
-						<ul class="tier-features">
-							<li>✓ Voller Funktionsumfang der ordentlichen Mitgliedschaft</li>
-							<li>✓ Freier Eintritt zu allen Vereinsfilmen</li>
-							<li>✓ Gültig mit entsprechendem Nachweis</li>
-						</ul>
-						<a href="#antrag" class="btn btn-secondary" data-tier="Ermäßigte Mitgliedschaft (36 €/Jahr)">Auswählen</a>
-					</div>
+      .member-pdf {
+        width: 100%;
+        min-height: 640px;
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-sm);
+        background: #fff;
+        margin-bottom: 0.85rem;
+      }
 
-					<div class="tier-card card">
-						<div class="tier-badge-gold">Kulturförderung</div>
-						<h3 class="tier-title">Fördermitgliedschaft</h3>
-						<div class="tier-price">ab 120 € <span>/ Jahr</span></div>
-						<p class="tier-desc">Für alle, die gezielt besondere Projekte, Filmrestaurierungen und Jugendfilmarbeit fördern möchten.</p>
-						<ul class="tier-features">
-							<li>✓ Alle Vorteile des ordentlichen Mitglieds</li>
-							<li>✓ Nennung auf Wunsch auf unserer Förderertafel</li>
-							<li>✓ Steuerlich abzugsfähige Spendenbescheinigung</li>
-							<li>✓ VIP-Plätze bei Sonderveranstaltungen</li>
-						</ul>
-						<a href="#antrag" class="btn btn-secondary" data-tier="Fördermitgliedschaft (ab 120 €/Jahr)">Auswählen</a>
-					</div>
-				</div>
-			</section>
+      .member-copy-col {
+        text-align: center;
+      }
 
-			<!-- Application Form -->
-			<section id="antrag" class="form-section card">
-				<div class="form-header">
-					<h2>Mitgliedsantrag online ausfüllen</h2>
-					<p>Füllen Sie einfach das folgende Formular aus. Wir senden Ihnen die Bestätigung und Ihren Mitgliedsausweis umgehend per Post zu.</p>
-				</div>
+      .script-heading {
+        font-size: clamp(2.6rem, 6vw, 4rem);
+        margin-bottom: 1.25rem;
+      }
 
-				<form id="membership-form" class="application-form">
-					<div class="form-grid">
-						<div class="form-group">
-							<label for="tier-select">Gewünschte Mitgliedschaft *</label>
-							<select id="tier-select" name="tier" required>
-								<option value="Ordentliches Mitglied (60 €/Jahr)">Ordentliches Mitglied (60 € / Jahr)</option>
-								<option value="Ermäßigte Mitgliedschaft (36 €/Jahr)">Ermäßigte Mitgliedschaft (36 € / Jahr)</option>
-								<option value="Fördermitgliedschaft (ab 120 €/Jahr)">Fördermitgliedschaft (ab 120 € / Jahr)</option>
-							</select>
-						</div>
+      .member-copy-col p {
+        color: #fff;
+        font-size: 1.05rem;
+      }
 
-						<div class="form-group">
-							<label for="anrede">Anrede</label>
-							<select id="anrede" name="anrede">
-								<option value="Keine Angabe">Keine Angabe</option>
-								<option value="Frau">Frau</option>
-								<option value="Herr">Herr</option>
-								<option value="Divers">Divers</option>
-							</select>
-						</div>
+      address {
+        font-style: normal;
+        color: #fff;
+        line-height: 1.7;
+        margin-top: 1.25rem;
+      }
 
-						<div class="form-group">
-							<label for="vorname">Vorname *</label>
-							<input type="text" id="vorname" name="vorname" required placeholder="z.B. Anna" />
-						</div>
+      .tiers-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+      }
 
-						<div class="form-group">
-							<label for="nachname">Nachname *</label>
-							<input type="text" id="nachname" name="nachname" required placeholder="z.B. Schmidt" />
-						</div>
+      .tier-card {
+        text-align: center;
+      }
 
-						<div class="form-group">
-							<label for="email">E-Mail-Adresse *</label>
-							<input type="email" id="email" name="email" required placeholder="ihre.email@beispiel.de" />
-						</div>
+      .tier-card h2 {
+        font-size: 1.6rem;
+        margin-bottom: 1rem;
+      }
 
-						<div class="form-group">
-							<label for="telefon">Telefonnummer (optional)</label>
-							<input type="text" id="telefon" name="telefon" placeholder="+49 ..." />
-						</div>
+      .tier-card img {
+        width: 100%;
+        max-width: 360px;
+        height: 220px;
+        object-fit: cover;
+        margin: 0 auto 1.25rem;
+      }
 
-						<div class="form-group full-width">
-							<label for="strasse">Straße & Hausnummer *</label>
-							<input type="text" id="strasse" name="strasse" required placeholder="Kinoweg 4" />
-						</div>
+      .tier-card ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        text-align: left;
+        max-width: 420px;
+        margin-inline: auto;
+        color: var(--text-secondary);
+      }
 
-						<div class="form-group">
-							<label for="plz">Postleitzahl *</label>
-							<input type="text" id="plz" name="plz" required placeholder="80331" />
-						</div>
+      .tier-card li {
+        position: relative;
+        padding-left: 1.1rem;
+        margin-bottom: 0.55rem;
+      }
 
-						<div class="form-group">
-							<label for="ort">Wohnort *</label>
-							<input type="text" id="ort" name="ort" required placeholder="München" />
-						</div>
+      .tier-card li::before {
+        content: "–";
+        position: absolute;
+        left: 0;
+      }
 
-						<div class="form-group full-width">
-							<label for="iban">IBAN für den jährlichen Mitgliedsbeitrag (SEPA) *</label>
-							<input type="text" id="iban" name="iban" required placeholder="DE00 0000 0000 0000 0000 00" />
-						</div>
-
-						<div class="form-group full-width">
-							<label for="bemerkung">Haben Sie Interessen, die Sie in den Verein einbringen möchten? (z.B. Bar, Filmvorführung, Redaktion)</label>
-							<textarea id="bemerkung" name="bemerkung" rows="3" placeholder="Ihre Notiz..."></textarea>
-						</div>
-
-						<div class="form-group full-width consent-checkboxes">
-							<label class="checkbox-row">
-								<input type="checkbox" required />
-								<span>Ich erkenne die Satzung der Lichtspielfreunde e.V. an und ermächtige den Verein, den jährlichen Mitgliedsbeitrag per SEPA-Lastschrift einzuziehen.</span>
-							</label>
-							<label class="checkbox-row">
-								<input type="checkbox" required />
-								<span>Ich habe die <a href="/datenschutz">Datenschutzerklärung</a> zur Kenntnis genommen und willige in die Verarbeitung meiner Daten zur Mitgliederverwaltung ein.</span>
-							</label>
-						</div>
-					</div>
-
-					<div class="form-submit">
-						<button type="submit" class="btn btn-primary">
-							Mitgliedsantrag verbindlich absenden
-						</button>
-					</div>
-
-					<div id="form-feedback" class="form-feedback" style="display: none;"></div>
-				</form>
-			</section>
-		</main>
-
-		<Footer />
-		<CookieBanner />
-
-		<script>
-			// Preselect tier when clicked in card
-			const selectButtons = document.querySelectorAll<HTMLAnchorElement>('[data-tier]');
-			const tierSelect = document.getElementById('tier-select') as HTMLSelectElement | null;
-
-			selectButtons.forEach((btn) => {
-				btn.addEventListener('click', (e) => {
-					const chosenTier = btn.dataset.tier;
-					if (tierSelect && chosenTier) {
-						tierSelect.value = chosenTier;
-					}
-				});
-			});
-
-			// Form handling simulation with clear feedback
-			const form = document.getElementById('membership-form') as HTMLFormElement | null;
-			const feedback = document.getElementById('form-feedback');
-
-			if (form && feedback) {
-				form.addEventListener('submit', (e) => {
-					e.preventDefault();
-					const formData = new FormData(form);
-					const name = formData.get('vorname') + ' ' + formData.get('nachname');
-					const email = formData.get('email');
-
-					feedback.innerHTML = `
-						<div class="alert alert-success">
-							<h4>🎉 Herzlichen Dank, ${name}!</h4>
-							<p>Ihr Mitgliedsantrag ist erfolgreich bei uns eingegangen. Wir haben eine Eingangsbestätigung an <strong>${email}</strong> gesendet. Der Vorstand wird Ihren Antrag in der nächsten Sitzung bestätigen und Ihnen Ihren Mitgliedsausweis zusenden.</p>
-						</div>
-					`;
-					feedback.style.display = 'block';
-					form.reset();
-					feedback.scrollIntoView({ behavior: 'smooth' });
-				});
-			}
-		</script>
-
-		<style>
-			.page-header {
-				text-align: center;
-				max-width: 800px;
-				margin: 0 auto 3.5rem;
-			}
-
-			.lead-text {
-				font-size: 1.15rem;
-				line-height: 1.7;
-				color: var(--text-secondary);
-			}
-
-			.benefits-section, .tiers-section {
-				margin-bottom: 4.5rem;
-			}
-
-			.benefits-section h2, .tiers-section h2 {
-				text-align: center;
-				margin-bottom: 2rem;
-			}
-
-			.benefits-grid {
-				display: grid;
-				grid-template-columns: repeat(4, 1fr);
-				gap: 1.5rem;
-			}
-
-			.benefit-card {
-				text-align: center;
-				padding: 1.5rem;
-			}
-
-			.benefit-icon {
-				font-size: 2.2rem;
-				margin-bottom: 0.85rem;
-			}
-
-			.benefit-card h3 {
-				font-size: 1.15rem;
-				margin-bottom: 0.5rem;
-				color: #fff;
-			}
-
-			.benefit-card p {
-				font-size: 0.9rem;
-				margin: 0;
-			}
-
-			/* Tiers */
-			.tiers-grid {
-				display: grid;
-				grid-template-columns: repeat(3, 1fr);
-				gap: 1.5rem;
-				align-items: stretch;
-			}
-
-			.tier-card {
-				display: flex;
-				flex-direction: column;
-				padding: 2rem;
-				position: relative;
-			}
-
-			.tier-badge {
-				position: absolute;
-				top: 1rem;
-				right: 1rem;
-				background: var(--gold);
-				color: #0c0e14;
-				font-size: 0.75rem;
-				font-weight: 700;
-				padding: 0.2rem 0.6rem;
-				border-radius: 9999px;
-				text-transform: uppercase;
-			}
-
-			.tier-badge-subtle {
-				position: absolute;
-				top: 1rem;
-				right: 1rem;
-				background: var(--bg-surface-elevated);
-				border: 1px solid var(--border-subtle);
-				color: var(--text-muted);
-				font-size: 0.75rem;
-				font-weight: 600;
-				padding: 0.2rem 0.6rem;
-				border-radius: 9999px;
-			}
-
-			.tier-badge-gold {
-				position: absolute;
-				top: 1rem;
-				right: 1rem;
-				background: rgba(229, 169, 60, 0.15);
-				border: 1px solid var(--gold);
-				color: var(--gold-light);
-				font-size: 0.75rem;
-				font-weight: 600;
-				padding: 0.2rem 0.6rem;
-				border-radius: 9999px;
-			}
-
-			.tier-title {
-				font-size: 1.35rem;
-				margin-bottom: 0.5rem;
-				color: #fff;
-			}
-
-			.tier-price {
-				font-size: 2.2rem;
-				font-weight: 700;
-				color: var(--gold-light);
-				margin-bottom: 0.75rem;
-			}
-
-			.tier-price span {
-				font-size: 1rem;
-				color: var(--text-muted);
-				font-weight: normal;
-			}
-
-			.tier-desc {
-				font-size: 0.92rem;
-				margin-bottom: 1.5rem;
-			}
-
-			.tier-features {
-				list-style: none;
-				padding: 0;
-				margin: 0 0 2rem;
-				display: flex;
-				flex-direction: column;
-				gap: 0.75rem;
-				font-size: 0.92rem;
-				color: var(--text-secondary);
-				flex: 1;
-			}
-
-			/* Form */
-			.form-section {
-				max-width: 800px;
-				margin: 0 auto;
-				padding: 2.5rem;
-				border-color: rgba(229, 169, 60, 0.35);
-			}
-
-			.form-header {
-				text-align: center;
-				margin-bottom: 2rem;
-			}
-
-			.form-grid {
-				display: grid;
-				grid-template-columns: 1fr 1fr;
-				gap: 1.25rem;
-			}
-
-			.full-width {
-				grid-column: 1 / -1;
-			}
-
-			.checkbox-row {
-				display: flex;
-				align-items: flex-start;
-				gap: 0.75rem;
-				font-size: 0.88rem;
-				margin-bottom: 0.75rem;
-				cursor: pointer;
-			}
-
-			.checkbox-row input {
-				margin-top: 0.2rem;
-				accent-color: var(--gold);
-			}
-
-			.form-submit {
-				text-align: center;
-				margin-top: 2rem;
-			}
-
-			.alert-success {
-				background: rgba(16, 185, 129, 0.15);
-				border: 1px solid #10b981;
-				border-radius: var(--radius-sm);
-				padding: 1.25rem;
-				margin-top: 1.5rem;
-			}
-
-			.alert-success h4 {
-				color: #34d399;
-				margin-bottom: 0.5rem;
-			}
-
-			.alert-success p {
-				margin: 0;
-				color: #d1fae5;
-			}
-
-			@media (max-width: 900px) {
-				.benefits-grid {
-					grid-template-columns: repeat(2, 1fr);
-				}
-
-				.tiers-grid {
-					grid-template-columns: 1fr;
-				}
-			}
-
-			@media (max-width: 600px) {
-				.benefits-grid {
-					grid-template-columns: 1fr;
-				}
-
-				.form-grid {
-					grid-template-columns: 1fr;
-				}
-
-				.form-section {
-					padding: 1.5rem 1rem;
-				}
-			}
-		</style>
-	</body>
+      @media (max-width: 900px) {
+        .member-layout,
+        .tiers-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      body {
+        background-image:
+          linear-gradient(rgba(15, 18, 26, 0.25), rgba(15, 18, 26, 0.35)),
+          url("/images/cp%20background.png");
+        background-size: cover;
+        background-position: center top;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-color: #0f121a;
+        min-height: 100vh;
+        margin: 0;
+      }
+    </style>
+  </body>
 </html>
-

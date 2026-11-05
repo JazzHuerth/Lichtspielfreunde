@@ -1,0 +1,181 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import CookieBanner from "../components/CookieBanner.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import { SITE_TITLE, VEREIN_FACEBOOK, VEREIN_INSTAGRAM } from "../consts";
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <BaseHead
+      title={`Umzug / Umbau – ${SITE_TITLE}`}
+      description="Die CP Lichtspielfreunde Hürth sind umgezogen. Die neue Location liegt in der Ritterstraße 24."
+    />
+  </head>
+  <body>
+    <Header />
+
+    <main>
+      <section class="move-page">
+        <h1 class="script-heading">Wir sind umgezogen</h1>
+
+        <p class="move-intro">
+          Vielen Dank an alle Helferinnen und Helfer die uns am Samstag, den
+          11.10.2025 beim großen Umzug tatkräftig unterstützt haben. Dank Eurer
+          Hilfe war das alte Kino in Windeseile ausgeräumt und alles in die neue
+          Location gebracht.
+        </p>
+
+        <div class="move-photos">
+          <figure>
+            <img
+              src="/images/umzug/helfer-1.jpg"
+              alt="Helferinnen und Helfer tragen Kartons aus dem alten Kino"
+            />
+          </figure>
+          <figure>
+            <img
+              src="/images/umzug/helfer-2.jpg"
+              alt="Umzugskartons werden entlang der Straße zur neuen Location getragen"
+            />
+          </figure>
+          <figure>
+            <img
+              src="/images/umzug/helfer-3.jpg"
+              alt="Ankunft der Umzugskartons an der neuen Location"
+            />
+          </figure>
+        </div>
+
+        <p class="move-address">
+          Die neue Location befindet sich in der{" "}
+          <strong>Ritterstraße 24</strong>, nur 160 m vom bisherigen Kino
+          entfernt.
+        </p>
+
+        <p class="move-copy">
+          Doch bevor es wieder heißt &gt;&gt; Vorhang auf, Film ab! &lt;&lt;,
+          steht jetzt erst einmal der Umbau an.
+        </p>
+
+        <p class="move-copy">
+          Wir halten Euch <a href="/umzug-umbau">hier</a>, unserem{" "}
+          <a href="/newsletter">Newsletter</a>, sowie auf unseren Social Media
+          Kanälen auf dem Laufenden.
+        </p>
+
+        <div class="move-social">
+          <a
+            href={VEREIN_FACEBOOK}
+            class="social-link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Besuchen Sie unsere Facebook-Seite
+          </a>
+          <a
+            href={VEREIN_INSTAGRAM}
+            class="social-link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Besuchen Sie unser Instagram-Profil
+          </a>
+        </div>
+
+        <figure class="donate-figure">
+          <img
+            src="/images/umzug/spendenaufruf.jpg"
+            alt="Spendenaufruf der CP Lichtspielfreunde Hürth zum Umbau"
+          />
+        </figure>
+      </section>
+    </main>
+
+    <Footer />
+    <CookieBanner />
+
+    <style>
+      .move-page {
+        max-width: 980px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .script-heading {
+        font-size: clamp(3rem, 8vw, 5rem);
+        margin: 0.5rem 0 1.75rem;
+      }
+
+      .move-intro,
+      .move-copy,
+      .move-address {
+        font-size: 1.12rem;
+        line-height: 1.7;
+        color: #fff;
+      }
+
+      .move-photos {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin: 2.5rem 0;
+        align-items: start;
+      }
+
+      .move-photos img {
+        width: 100%;
+        height: 320px;
+        object-fit: cover;
+        border-radius: var(--radius-sm);
+      }
+
+      .move-address strong {
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      .move-social {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        margin: 1.5rem 0 2.5rem;
+      }
+
+      .donate-figure {
+        margin: 0 auto 1rem;
+        max-width: 720px;
+      }
+
+      .donate-figure img {
+        width: 100%;
+        border-radius: var(--radius-md);
+      }
+
+      @media (max-width: 800px) {
+        .move-photos {
+          grid-template-columns: 1fr;
+        }
+
+        .move-photos img {
+          height: 360px;
+        }
+      }
+      body {
+        background-image:
+          linear-gradient(rgba(15, 18, 26, 0.25), rgba(15, 18, 26, 0.35)),
+          url("/images/cp%20background.png");
+        background-size: cover;
+        background-position: center top;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-color: #0f121a;
+        min-height: 100vh;
+        margin: 0;
+      }
+    </style>
+  </body>
+</html>

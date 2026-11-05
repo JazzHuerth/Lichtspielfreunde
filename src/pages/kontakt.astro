@@ -1,275 +1,229 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import CookieBanner from '../components/CookieBanner.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE, VEREIN_CITY, VEREIN_EMAIL, VEREIN_NAME, VEREIN_PHONE, VEREIN_STREET } from '../consts';
+import BaseHead from "../components/BaseHead.astro";
+import CookieBanner from "../components/CookieBanner.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import {
+  SITE_TITLE,
+  VEREIN_CITY,
+  VEREIN_EMAIL,
+  VEREIN_PHONE,
+  VEREIN_POST_CITY,
+  VEREIN_POST_STREET,
+  VEREIN_STREET,
+} from "../consts";
 ---
 
 <!doctype html>
 <html lang="de">
-	<head>
-		<BaseHead title={`Kontakt – ${SITE_TITLE}`} description={`Nehmen Sie Kontakt mit den ${VEREIN_NAME} auf. Wir freuen uns auf Ihre Nachricht.`} />
-	</head>
-	<body>
-		<Header />
+  <head>
+    <BaseHead
+      title={`Kontakt – ${SITE_TITLE}`}
+      description={`Kontakt zu den CP Filmfreunden: Vereinsheim Ritterstraße 24, Hürth-Efferen.`}
+    />
+  </head>
+  <body>
+    <Header />
 
-		<main>
-			<div class="page-header">
-				<span class="sub-heading">Wir freuen uns auf Sie</span>
-				<h1>Kontakt & Anfahrt</h1>
-				<p class="lead-text">
-					Haben Sie Fragen zu unserem Programm, Interesse an einer Mitgliedschaft oder einen besonderen Filmwunsch? 
-					Schreiben Sie uns oder besuchen Sie uns persönlich im Foyer vor der nächsten Vorstellung.
-				</p>
-			</div>
+    <main>
+      <div class="contact-layout">
+        <section class="contact-info-col">
+          <h1>Kontakt</h1>
 
-			<div class="contact-layout">
-				<!-- Contact Info & Venue -->
-				<div class="contact-info-col">
-					<div class="info-card card">
-						<h3>Spielort & Vereinsadresse</h3>
-						<address class="contact-address">
-							<strong>{VEREIN_NAME}</strong><br />
-							{VEREIN_STREET}<br />
-							{VEREIN_CITY}
-						</address>
+          <div class="info-block">
+            <h2>Adresse</h2>
+            <p>
+              <em>Geschäftsstelle / Vereinsheim:</em>
+              <br />
+              {VEREIN_STREET} | {VEREIN_CITY}
+            </p>
+            <p>
+              <em>Post-/Lieferanschrift:</em>
+              <br />
+              {VEREIN_POST_STREET}
+              <br />
+              {VEREIN_POST_CITY}-Efferen
+            </p>
+          </div>
 
-						<div class="contact-channels">
-							<div class="channel-item">
-								<span class="channel-icon">✉️</span>
-								<div>
-									<div class="channel-label">E-Mail</div>
-									<a href={`mailto:${VEREIN_EMAIL}`}>{VEREIN_EMAIL}</a>
-								</div>
-							</div>
-							<div class="channel-item">
-								<span class="channel-icon">📞</span>
-								<div>
-									<div class="channel-label">Telefon</div>
-									<span>{VEREIN_PHONE}</span>
-								</div>
-							</div>
-							<div class="channel-item">
-								<span class="channel-icon">🕒</span>
-								<div>
-									<div class="channel-label">Kino-Kasse & Foyer</div>
-									<span>Jeweils 45 Minuten vor Vorstellungsbeginn</span>
-								</div>
-							</div>
-						</div>
-					</div>
+          <div class="info-block">
+            <h2>Telefon</h2>
+            <p>
+              <a href={`tel:${VEREIN_PHONE.replace(/\s/g, "")}`}>
+                {VEREIN_PHONE}
+              </a>
+            </p>
+            <ul class="hours">
+              <li>Montag bis Donnerstag 17 Uhr - 19 Uhr</li>
+              <li>Freitag 17 Uhr - 21 Uhr</li>
+              <li>Samstag 11 Uhr - 21 Uhr</li>
+              <li>Sonntag 13 Uhr - 19 Uhr</li>
+            </ul>
+          </div>
 
-					<div class="info-card card">
-						<h3>Öffentliche Verkehrsmittel & Anreise</h3>
-						<ul class="transit-list">
-							<li><strong>U-Bahn:</strong> U3 / U6 bis Haltestelle „Sendlinger Tor“, ca. 4 Min. Fußweg</li>
-							<li><strong>Tram:</strong> Linie 16, 17, 18, 27 bis Haltestelle „Sendlinger Tor“</li>
-							<li><strong>Fahrrad:</strong> Ausreichend Fahrradabstellplätze direkt vor dem Foyer</li>
-							<li><strong>Parken:</strong> Wir empfehlen die Anreise mit öffentlichen Verkehrsmitteln. Nächstes Parkhaus: Parkgarage Herzogspitalstraße (ca. 400 m).</li>
-						</ul>
-					</div>
-				</div>
+          <div class="info-block">
+            <h2>E-Mail</h2>
+            <p>
+              <a href={`mailto:${VEREIN_EMAIL}`}>{VEREIN_EMAIL}</a>
+            </p>
+          </div>
+        </section>
 
-				<!-- Contact Form -->
-				<div class="contact-form-col">
-					<div class="card form-card">
-						<h3>Schreiben Sie uns eine Nachricht</h3>
-						<form id="contact-form" class="contact-form">
-							<div class="form-group">
-								<label for="c-name">Ihr Name *</label>
-								<input type="text" id="c-name" name="name" required placeholder="Vor- und Nachname" />
-							</div>
+        <section class="contact-form-col">
+          <h2 class="form-title">Kontaktformular</h2>
+          <form id="contact-form" class="contact-form">
+            <div class="form-group">
+              <label for="c-name">Name *</label>
+              <input type="text" id="c-name" name="name" required />
+            </div>
+            <div class="form-group">
+              <label for="c-email">Email *</label>
+              <input type="email" id="c-email" name="email" required />
+            </div>
+            <div class="form-group">
+              <label for="c-phone">Telefon</label>
+              <input type="text" id="c-phone" name="telefon" />
+            </div>
+            <div class="form-group">
+              <label for="c-subject">Betreff *</label>
+              <input type="text" id="c-subject" name="subject" required />
+            </div>
+            <div class="form-group">
+              <label for="c-message">Nachricht *</label>
+              <textarea
+                id="c-message"
+                name="message"
+                rows="6"
+                required
+              ></textarea>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">
+                Nachricht senden
+              </button>
+            </div>
+            <div
+              id="contact-feedback"
+              class="form-feedback"
+              style="display: none;"
+            ></div>
+          </form>
+        </section>
+      </div>
+    </main>
 
-							<div class="form-group">
-								<label for="c-email">Ihre E-Mail-Adresse *</label>
-								<input type="email" id="c-email" name="email" required placeholder="ihre.adresse@beispiel.de" />
-							</div>
+    <Footer />
+    <CookieBanner />
 
-							<div class="form-group">
-								<label for="c-subject">Betreff *</label>
-								<select id="c-subject" name="subject" required>
-									<option value="Allgemeine Frage zum Kinoprogramm">Allgemeine Frage zum Kinoprogramm</option>
-									<option value="Frage zur Mitgliedschaft">Frage zur Mitgliedschaft</option>
-									<option value="Filmvorschlag für das Kuratorium">Filmvorschlag für das Kuratorium</option>
-									<option value="Presse & Kooperationen">Presse & Kooperationen</option>
-									<option value="Sonstiges Anliegen">Sonstiges Anliegen</option>
-								</select>
-							</div>
+    <script>
+      const form = document.getElementById(
+        "contact-form",
+      ) as HTMLFormElement | null;
+      const feedback = document.getElementById("contact-feedback");
 
-							<div class="form-group">
-								<label for="c-message">Ihre Nachricht *</label>
-								<textarea id="c-message" name="message" rows="5" required placeholder="Was möchten Sie uns mitteilen?"></textarea>
-							</div>
+      if (form && feedback) {
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const formData = new FormData(form);
+          const name = formData.get("name");
 
-							<div class="form-group">
-								<label class="checkbox-row">
-									<input type="checkbox" required />
-									<span>Ich willige ein, dass meine Angaben zur Kontaktaufnahme und Zuordnung für eventuelle Rückfragen verarbeitet werden (<a href="/datenschutz">Datenschutzerklärung</a>).</span>
-								</label>
-							</div>
-
-							<button type="submit" class="btn btn-primary full-width-btn">
-								Nachricht absenden
-							</button>
-
-							<div id="contact-feedback" class="form-feedback" style="display: none;"></div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</main>
-
-		<Footer />
-		<CookieBanner />
-
-		<script>
-			const form = document.getElementById('contact-form') as HTMLFormElement | null;
-			const feedback = document.getElementById('contact-feedback');
-
-			if (form && feedback) {
-				form.addEventListener('submit', (e) => {
-					e.preventDefault();
-					const formData = new FormData(form);
-					const name = formData.get('name');
-
-					feedback.innerHTML = `
+          feedback.innerHTML = `
 						<div class="alert alert-success">
 							<h4>Vielen Dank, ${name}!</h4>
-							<p>Ihre Nachricht wurde erfolgreich übermittelt. Wir melden uns in der Regel innerhalb von 1-2 Werktagen bei Ihnen zurück.</p>
+							<p>Ihre Nachricht wurde übermittelt. Wir melden uns so bald wie möglich bei Ihnen.</p>
 						</div>
 					`;
-					feedback.style.display = 'block';
-					form.reset();
-				});
-			}
-		</script>
+          feedback.style.display = "block";
+          form.reset();
+        });
+      }
+    </script>
 
-		<style>
-			.page-header {
-				text-align: center;
-				max-width: 800px;
-				margin: 0 auto 3.5rem;
-			}
+    <style>
+      .contact-layout {
+        display: grid;
+        grid-template-columns: 1fr 1.15fr;
+        gap: 3rem;
+      }
 
-			.lead-text {
-				font-size: 1.15rem;
-				line-height: 1.7;
-				color: var(--text-secondary);
-			}
+      h1 {
+        font-size: 2.2rem;
+        margin-bottom: 1.75rem;
+      }
 
-			.contact-layout {
-				display: grid;
-				grid-template-columns: 1fr 1.2fr;
-				gap: 2.5rem;
-			}
+      .form-title {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+      }
 
-			.contact-info-col {
-				display: flex;
-				flex-direction: column;
-				gap: 1.5rem;
-			}
+      .info-block {
+        margin-bottom: 2rem;
+      }
 
-			.info-card h3, .form-card h3 {
-				color: #fff;
-				margin-bottom: 1.25rem;
-				font-size: 1.25rem;
-			}
+      .info-block h2 {
+        font-size: 1.2rem;
+        margin-bottom: 0.6rem;
+      }
 
-			.contact-address {
-				font-style: normal;
-				line-height: 1.6;
-				color: var(--text-secondary);
-				margin-bottom: 1.5rem;
-				font-size: 1rem;
-			}
+      .info-block p,
+      .hours {
+        color: var(--text-secondary);
+      }
 
-			.contact-channels {
-				display: flex;
-				flex-direction: column;
-				gap: 1rem;
-				padding-top: 1rem;
-				border-top: 1px solid var(--border-subtle);
-			}
+      .hours {
+        list-style: none;
+        padding: 0;
+        margin: 0.4rem 0 0;
+      }
 
-			.channel-item {
-				display: flex;
-				align-items: flex-start;
-				gap: 0.85rem;
-			}
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+      }
 
-			.channel-icon {
-				font-size: 1.2rem;
-			}
+      .alert-success {
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid #10b981;
+        border-radius: var(--radius-sm);
+        padding: 1.25rem;
+        margin-top: 1.25rem;
+      }
 
-			.channel-label {
-				font-size: 0.78rem;
-				text-transform: uppercase;
-				color: var(--text-muted);
-				font-weight: 600;
-			}
+      .alert-success h4 {
+        color: #34d399;
+        margin-bottom: 0.4rem;
+      }
 
-			.transit-list {
-				list-style: none;
-				padding: 0;
-				margin: 0;
-				display: flex;
-				flex-direction: column;
-				gap: 0.85rem;
-				font-size: 0.92rem;
-			}
+      .alert-success p {
+        margin: 0;
+        color: #d1fae5;
+      }
 
-			.transit-list li {
-				color: var(--text-secondary);
-				line-height: 1.5;
-			}
+      @media (max-width: 840px) {
+        .contact-layout {
+          grid-template-columns: 1fr;
+        }
 
-			.transit-list strong {
-				color: #fff;
-			}
+        .form-actions {
+          justify-content: stretch;
+        }
 
-			.full-width-btn {
-				width: 100%;
-			}
-
-			.checkbox-row {
-				display: flex;
-				align-items: flex-start;
-				gap: 0.65rem;
-				font-size: 0.85rem;
-				cursor: pointer;
-				color: var(--text-muted);
-			}
-
-			.checkbox-row input {
-				margin-top: 0.2rem;
-				accent-color: var(--gold);
-			}
-
-			.alert-success {
-				background: rgba(16, 185, 129, 0.15);
-				border: 1px solid #10b981;
-				border-radius: var(--radius-sm);
-				padding: 1.25rem;
-				margin-top: 1.25rem;
-			}
-
-			.alert-success h4 {
-				color: #34d399;
-				margin-bottom: 0.4rem;
-			}
-
-			.alert-success p {
-				margin: 0;
-				color: #d1fae5;
-			}
-
-			@media (max-width: 840px) {
-				.contact-layout {
-					grid-template-columns: 1fr;
-				}
-			}
-		</style>
-	</body>
+        .form-actions .btn {
+          width: 100%;
+        }
+      }
+      body {
+        background-image:
+          linear-gradient(rgba(15, 18, 26, 0.25), rgba(15, 18, 26, 0.35)),
+          url("/images/cp%20background.png");
+        background-size: cover;
+        background-position: center top;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-color: #0f121a;
+        min-height: 100vh;
+        margin: 0;
+      }
+    </style>
+  </body>
 </html>
-

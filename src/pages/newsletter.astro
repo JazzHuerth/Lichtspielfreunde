@@ -1,180 +1,179 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import CookieBanner from '../components/CookieBanner.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE, VEREIN_NAME } from '../consts';
+import BaseHead from "../components/BaseHead.astro";
+import CookieBanner from "../components/CookieBanner.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import { SITE_TITLE, VEREIN_NAME } from "../consts";
 ---
 
 <!doctype html>
 <html lang="de">
-	<head>
-		<BaseHead title={`Newsletter – ${SITE_TITLE}`} description={`Der Newsletter der ${VEREIN_NAME}. Monatliche Programmvorschauen, Filmtipps und Einladungen.`} />
-	</head>
-	<body>
-		<Header />
+  <head>
+    <BaseHead
+      title={`Newsletter – ${SITE_TITLE}`}
+      description={`Newsletter An- und Abmeldung der ${VEREIN_NAME}.`}
+    />
+  </head>
+  <body>
+    <Header />
 
-		<main>
-			<div class="newsletter-wrapper">
-				<div class="card newsletter-card">
-					<div class="newsletter-icon">📬</div>
-					<span class="sub-heading">Immer bestens informiert</span>
-					<h1>Der Lichtspielfreunde-Newsletter</h1>
-					<p class="newsletter-intro">
-						Verpassen Sie keine Filmreihe mehr! Unser Newsletter erscheint ein- bis zweimal monatlich und liefert Ihnen:
-					</p>
+    <main>
+      <div class="newsletter-wrapper">
+        <h1 class="script-heading">Newsletter An-/ Abmeldung</h1>
 
-					<ul class="newsletter-benefits">
-						<li>✓ Rechtzeitige Ankündigung des neuen Quartalsprogramms</li>
-						<li>✓ Exklusive Hintergrundberichte, Filmtipps und Interviews</li>
-						<li>✓ Infos zu Sonderveranstaltungen, 35mm-Sonderabenden und Gästen</li>
-						<li>✓ Jederzeit mit einem Klick abbestellbar – kein Spam, garantiert.</li>
-					</ul>
+        <form id="newsletter-form" class="newsletter-form">
+          <div class="form-group">
+            <label for="nl-name">Name:</label>
+            <input type="text" id="nl-name" name="name" />
+          </div>
+          <div class="form-group">
+            <label for="nl-vorname">Vorname:</label>
+            <input type="text" id="nl-vorname" name="vorname" />
+          </div>
+          <div class="form-group">
+            <label for="nl-email">E-Mail-Adresse:</label>
+            <input type="email" id="nl-email" name="email" required />
+          </div>
 
-					<form id="newsletter-form" class="newsletter-form">
-						<div class="form-group">
-							<label for="nl-name">Ihr Vorname (optional)</label>
-							<input type="text" id="nl-name" name="name" placeholder="z.B. Maria" />
-						</div>
+          <fieldset class="action-set">
+            <legend>Sie möchten sich für unseren Newsletter</legend>
+            <label class="radio-row">
+              <input type="radio" name="action" value="subscribe" checked />
+              anmelden
+            </label>
+            <label class="radio-row">
+              <input type="radio" name="action" value="unsubscribe" />
+              abmelden
+            </label>
+          </fieldset>
 
-						<div class="form-group">
-							<label for="nl-email">Ihre E-Mail-Adresse *</label>
-							<input type="email" id="nl-email" name="email" required placeholder="ihre.adresse@beispiel.de" />
-						</div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+              Abschicken
+            </button>
+          </div>
 
-						<div class="form-group">
-							<label class="checkbox-row">
-								<input type="checkbox" required />
-								<span>Ich stimme zu, dass mich die {VEREIN_NAME} per E-Mail über das Kinoprogramm und Vereinsaktivitäten informieren dürfen. Abmeldung jederzeit möglich. (<a href="/datenschutz">Datenschutz</a>)</span>
-							</label>
-						</div>
+          <div
+            id="newsletter-feedback"
+            class="form-feedback"
+            style="display: none;"
+          ></div>
+        </form>
 
-						<button type="submit" class="btn btn-primary full-width-btn">
-							Kostenlos anmelden
-						</button>
+        <p class="privacy-link">
+          <a href="/datenschutz">Datenschutzerklärung</a>
+        </p>
+      </div>
+    </main>
 
-						<div id="newsletter-feedback" class="form-feedback" style="display: none;"></div>
-					</form>
-				</div>
-			</div>
-		</main>
+    <Footer />
+    <CookieBanner />
 
-		<Footer />
-		<CookieBanner />
+    <script>
+      const form = document.getElementById(
+        "newsletter-form",
+      ) as HTMLFormElement | null;
+      const feedback = document.getElementById("newsletter-feedback");
 
-		<script>
-			const form = document.getElementById('newsletter-form') as HTMLFormElement | null;
-			const feedback = document.getElementById('newsletter-feedback');
+      if (form && feedback) {
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const formData = new FormData(form);
+          const email = formData.get("email");
+          const action = formData.get("action");
+          const isSubscribe = action === "subscribe";
 
-			if (form && feedback) {
-				form.addEventListener('submit', (e) => {
-					e.preventDefault();
-					const formData = new FormData(form);
-					const email = formData.get('email');
-
-					feedback.innerHTML = `
+          feedback.innerHTML = `
 						<div class="alert alert-success">
-							<h4>Fast geschafft!</h4>
-							<p>Wir haben eine Bestätigungs-E-Mail (Double-Opt-In) an <strong>${email}</strong> geschickt. Bitte klicken Sie auf den darin enthaltenen Link, um Ihre Anmeldung abzuschließen.</p>
+							<h4>${isSubscribe ? "Anmeldung erhalten" : "Abmeldung erhalten"}</h4>
+							<p>${
+                isSubscribe
+                  ? `Wir haben Ihre Newsletter-Anmeldung für <strong>${email}</strong> entgegengenommen.`
+                  : `Wir haben die Abmeldung für <strong>${email}</strong> entgegengenommen.`
+              }</p>
 						</div>
 					`;
-					feedback.style.display = 'block';
-					form.reset();
-				});
-			}
-		</script>
+          feedback.style.display = "block";
+          form.reset();
+          const subscribe = form.querySelector(
+            'input[value="subscribe"]',
+          ) as HTMLInputElement | null;
+          if (subscribe) subscribe.checked = true;
+        });
+      }
+    </script>
 
-		<style>
-			.newsletter-wrapper {
-				max-width: 680px;
-				margin: 1.5rem auto 3rem;
-			}
+    <style>
+      .newsletter-wrapper {
+        max-width: 520px;
+        margin: 1rem auto 3rem;
+      }
 
-			.newsletter-card {
-				padding: 3rem 2.5rem;
-				text-align: center;
-				border-color: rgba(229, 169, 60, 0.35);
-			}
+      .script-heading {
+        font-size: clamp(2.4rem, 6vw, 3.6rem);
+        margin-bottom: 2rem;
+      }
 
-			.newsletter-icon {
-				font-size: 3rem;
-				margin-bottom: 0.75rem;
-			}
+      .action-set {
+        border: none;
+        padding: 0;
+        margin: 1.25rem 0 1.5rem;
+      }
 
-			.newsletter-intro {
-				font-size: 1.05rem;
-				color: var(--text-secondary);
-				margin-bottom: 1.5rem;
-			}
+      .action-set legend {
+        padding: 0;
+        margin-bottom: 0.6rem;
+        color: var(--text-secondary);
+        font-weight: 600;
+      }
 
-			.newsletter-benefits {
-				list-style: none;
-				padding: 0;
-				margin: 0 auto 2.25rem;
-				display: flex;
-				flex-direction: column;
-				gap: 0.65rem;
-				text-align: left;
-				max-width: 520px;
-				font-size: 0.95rem;
-				color: var(--text-secondary);
-			}
+      .radio-row {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        margin-bottom: 0.35rem;
+        cursor: pointer;
+        color: var(--text-secondary);
+      }
 
-			.newsletter-benefits li {
-				background: rgba(255, 255, 255, 0.02);
-				padding: 0.4rem 0.6rem;
-				border-radius: 4px;
-			}
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+      }
 
-			.newsletter-form {
-				text-align: left;
-				max-width: 520px;
-				margin: 0 auto;
-			}
+      .privacy-link {
+        margin-top: 2.5rem;
+      }
 
-			.full-width-btn {
-				width: 100%;
-				margin-top: 0.5rem;
-			}
+      .alert-success {
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid #10b981;
+        border-radius: var(--radius-sm);
+        padding: 1.25rem;
+        margin-top: 1.25rem;
+      }
 
-			.checkbox-row {
-				display: flex;
-				align-items: flex-start;
-				gap: 0.65rem;
-				font-size: 0.85rem;
-				cursor: pointer;
-				color: var(--text-muted);
-			}
+      .alert-success h4 {
+        color: #34d399;
+        margin-bottom: 0.4rem;
+      }
 
-			.checkbox-row input {
-				margin-top: 0.2rem;
-				accent-color: var(--gold);
-			}
-
-			.alert-success {
-				background: rgba(16, 185, 129, 0.15);
-				border: 1px solid #10b981;
-				border-radius: var(--radius-sm);
-				padding: 1.25rem;
-				margin-top: 1.25rem;
-			}
-
-			.alert-success h4 {
-				color: #34d399;
-				margin-bottom: 0.4rem;
-			}
-
-			.alert-success p {
-				margin: 0;
-				color: #d1fae5;
-			}
-
-			@media (max-width: 600px) {
-				.newsletter-card {
-					padding: 2rem 1.25rem;
-				}
-			}
-		</style>
-	</body>
+      .alert-success p {
+        margin: 0;
+        color: #d1fae5;
+      }
+      body {
+        background-image:
+          linear-gradient(rgba(15, 18, 26, 0.25), rgba(15, 18, 26, 0.35)),
+          url("/images/cp%20background.png");
+        background-size: cover;
+        background-position: center top;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-color: #0f121a;
+        min-height: 100vh;
+        margin: 0;
+      }
+    </style>
+  </body>
 </html>
-
