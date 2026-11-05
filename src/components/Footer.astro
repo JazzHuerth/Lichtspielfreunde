@@ -1,198 +1,241 @@
 ---
-import { SITE_TITLE, VEREIN_CITY, VEREIN_EMAIL, VEREIN_PHONE, VEREIN_STREET } from '../consts';
+import {
+  SITE_TITLE,
+  VEREIN_CITY,
+  VEREIN_EMAIL,
+  VEREIN_FACEBOOK,
+  VEREIN_INSTAGRAM,
+  VEREIN_NAME,
+  VEREIN_PHONE,
+  VEREIN_POST_CARE_OF,
+  VEREIN_POST_CITY,
+  VEREIN_POST_STREET,
+  VEREIN_STREET,
+} from "../consts";
 const today = new Date();
 ---
 
 <footer class="site-footer">
-	<div class="footer-container">
-		<div class="footer-grid">
-			<!-- Col 1: Club Info -->
-			<div class="footer-col">
-				<div class="footer-brand">
-					<img src="/logo.svg" alt="Lichtspielfreunde Logo" width="180" height="36" class="footer-logo" />
-					<p class="brand-desc">
-						Gemeinnütziger Verein zur Förderung der Filmkunst, Erhaltung der Kinokultur und Präsentation von unabhängigen Filmen und Filmklassikern.
-					</p>
-				</div>
-			</div>
+  <div class="footer-container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="footer-brand">
+          <img
+            src="/images/cp-logo.png"
+            alt="CP Lichtspielfreunde Hürth"
+            width="180"
+            height="36"
+            class="footer-logo"
+          />
+          <p class="brand-desc">
+            Gemeinnütziger Verein zur Förderung der Filmkunst in Hürth-Efferen.
+            Neue Location: Ritterstraße 24.
+          </p>
+        </div>
+      </div>
 
-			<!-- Col 2: Navigation -->
-			<div class="footer-col">
-				<h4 class="footer-heading">Navigation</h4>
-				<ul class="footer-links">
-					<li><a href="/">Home</a></li>
-					<li><a href="/#programm">Kinoprogramm</a></li>
-					<li><a href="/mitglied-werden">Mitglied werden</a></li>
-					<li><a href="/kontakt">Kontakt</a></li>
-					<li><a href="/programm">Filmverwaltung (Intern)</a></li>
-				</ul>
-			</div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Navigation</h4>
+        <ul class="footer-links">
+          <li>
+            <a href="/">Home</a>
+          </li>
+          <li>
+            <a href="/umzug-umbau">Umzug / Umbau</a>
+          </li>
+          <li>
+            <a href="/mitglied-werden">Mitglied werden</a>
+          </li>
+          <li>
+            <a href="/kontakt">Kontakt</a>
+          </li>
+        </ul>
+      </div>
 
-			<!-- Col 3: Rechtliches & Service -->
-			<div class="footer-col">
-				<h4 class="footer-heading">Mehr & Rechtliches</h4>
-				<ul class="footer-links">
-					<li><a href="/newsletter">Newsletter abonnieren</a></li>
-					<li><a href="/impressum">Impressum</a></li>
-					<li><a href="/datenschutz">Datenschutzerklärung</a></li>
-					<li><button type="button" class="cookie-toggle-link" onclick="window.openCookieSettings?.()">Cookie-Einstellungen</button></li>
-				</ul>
-			</div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Mehr & Rechtliches</h4>
+        <ul class="footer-links">
+          <li>
+            <a href="/newsletter">Newsletter</a>
+          </li>
+          <li>
+            <a href="/impressum">Impressum</a>
+          </li>
+          <li>
+            <a href="/datenschutz">Datenschutz</a>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="cookie-toggle-link"
+              onclick="window.openCookieSettings?.()"
+            >
+              Cookie-Einstellungen
+            </button>
+          </li>
+        </ul>
+      </div>
 
-			<!-- Col 4: Spielort -->
-			<div class="footer-col">
-				<h4 class="footer-heading">Spielort & Kontakt</h4>
-				<address class="footer-address">
-					<strong>Lichtspielfreunde e.V.</strong><br />
-					{VEREIN_STREET}<br />
-					{VEREIN_CITY}<br />
-					<a href={`mailto:${VEREIN_EMAIL}`}>{VEREIN_EMAIL}</a><br />
-					<span class="tel-text">{VEREIN_PHONE}</span>
-				</address>
-				<p class="doors-info">Einlass & Foyer-Bar jeweils 45 Minuten vor Vorstellungsbeginn geöffnet.</p>
-			</div>
-		</div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Spielort & Kontakt</h4>
+        <address class="footer-address">
+          <strong>{VEREIN_NAME}</strong>
+          <br />
+          Geschäftsstelle / Vereinsheim:
+          <br />
+          {VEREIN_STREET}
+          <br />
+          {VEREIN_CITY}
+          <br />
+          <br />
+          Postanschrift:
+          <br />
+          {VEREIN_POST_CARE_OF}
+          <br />
+          {VEREIN_POST_STREET}
+          <br />
+          {VEREIN_POST_CITY}
+          <br />
+          <a href={`mailto:${VEREIN_EMAIL}`}>{VEREIN_EMAIL}</a>
+          <br />
+          <span class="tel-text">{VEREIN_PHONE}</span>
+        </address>
+        <div class="footer-social">
+          <a href={VEREIN_FACEBOOK} target="_blank" rel="noopener noreferrer">
+            Facebook
+          </a>
+          <a href={VEREIN_INSTAGRAM} target="_blank" rel="noopener noreferrer">
+            Instagram
+          </a>
+        </div>
+      </div>
+    </div>
 
-		<div class="footer-bottom">
-			<p>&copy; {today.getFullYear()} {SITE_TITLE}. Alle Rechte vorbehalten.</p>
-			<p class="footer-claim">Kino mit Leidenschaft und Gemeinschaft.</p>
-		</div>
-	</div>
+    <div class="footer-bottom">
+      <p>
+        &copy; {today.getFullYear()} {SITE_TITLE} & Gerhard Karl – Alle Rechte
+        vorbehalten
+      </p>
+    </div>
+  </div>
 </footer>
 
 <style>
-	.site-footer {
-		background: #090b10;
-		border-top: 1px solid var(--border-subtle);
-		padding: 3.5rem 1.25rem 2rem;
-		margin-top: auto;
-		font-size: 0.92rem;
-		color: var(--text-muted);
-	}
+  .site-footer {
+    background: #090b10;
+    border-top: 1px solid var(--border-subtle);
+    padding: 3.5rem 1.25rem 2rem;
+    margin-top: auto;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+  }
 
-	.footer-container {
-		max-width: var(--container-width);
-		margin: 0 auto;
-	}
+  .footer-container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+  }
 
-	.footer-grid {
-		display: grid;
-		grid-template-columns: 2fr 1fr 1fr 1.5fr;
-		gap: 2.5rem;
-		margin-bottom: 2.5rem;
-	}
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    gap: 2.5rem;
+    margin-bottom: 2.5rem;
+  }
 
-	.footer-logo {
-		margin-bottom: 0.85rem;
-	}
+  .footer-logo {
+    margin-bottom: 0.85rem;
+  }
 
-	.brand-desc {
-		font-size: 0.88rem;
-		line-height: 1.6;
-		color: var(--text-secondary);
-	}
+  .brand-desc {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
 
-	.footer-heading {
-		color: #fff;
-		font-size: 1rem;
-		margin-bottom: 1rem;
-		letter-spacing: 0.02em;
-		text-transform: uppercase;
-		font-size: 0.85rem;
-		font-weight: 700;
-		color: var(--gold-light);
-	}
+  .footer-heading {
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--gold-light);
+    margin-bottom: 1rem;
+  }
 
-	.footer-links {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		display: flex;
-		flex-direction: column;
-		gap: 0.55rem;
-	}
+  .footer-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
 
-	.footer-links a {
-		color: var(--text-secondary);
-		text-decoration: none;
-		transition: color 0.15s;
-	}
+  .footer-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
 
-	.footer-links a:hover {
-		color: var(--gold-light);
-		text-decoration: none;
-	}
+  .footer-links a:hover {
+    color: var(--gold-light);
+    text-decoration: none;
+  }
 
-	.cookie-toggle-link {
-		background: none;
-		border: none;
-		padding: 0;
-		font-family: inherit;
-		font-size: inherit;
-		color: var(--text-secondary);
-		cursor: pointer;
-		text-align: left;
-		transition: color 0.15s;
-	}
+  .cookie-toggle-link {
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+    font-size: inherit;
+    color: var(--text-secondary);
+    cursor: pointer;
+    text-align: left;
+    transition: color 0.15s;
+  }
 
-	.cookie-toggle-link:hover {
-		color: var(--gold-light);
-		text-decoration: underline;
-	}
+  .cookie-toggle-link:hover {
+    color: var(--gold-light);
+    text-decoration: underline;
+  }
 
-	.footer-address {
-		font-style: normal;
-		line-height: 1.65;
-		color: var(--text-secondary);
-		margin-bottom: 0.75rem;
-	}
+  .footer-address {
+    font-style: normal;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+  }
 
-	.footer-address strong {
-		color: #fff;
-	}
+  .footer-address strong {
+    color: #fff;
+  }
 
-	.doors-info {
-		font-size: 0.82rem;
-		color: var(--text-muted);
-		margin: 0;
-	}
+  .footer-social {
+    display: flex;
+    gap: 1rem;
+  }
 
-	.footer-bottom {
-		border-top: 1px solid var(--border-subtle);
-		padding-top: 1.5rem;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		flex-wrap: wrap;
-		gap: 1rem;
-		font-size: 0.85rem;
-	}
+  .footer-bottom {
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 1.5rem;
+    font-size: 0.85rem;
+  }
 
-	.footer-bottom p {
-		margin: 0;
-		color: var(--text-muted);
-	}
+  .footer-bottom p {
+    margin: 0;
+    color: var(--text-muted);
+  }
 
-	.footer-claim {
-		font-style: italic;
-	}
+  @media (max-width: 900px) {
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+  }
 
-	@media (max-width: 900px) {
-		.footer-grid {
-			grid-template-columns: 1fr 1fr;
-			gap: 2rem;
-		}
-	}
-
-	@media (max-width: 580px) {
-		.footer-grid {
-			grid-template-columns: 1fr;
-			gap: 2rem;
-		}
-
-		.footer-bottom {
-			flex-direction: column;
-			text-align: center;
-		}
-	}
+  @media (max-width: 580px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
 </style>
