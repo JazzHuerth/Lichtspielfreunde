@@ -18,7 +18,6 @@ export const VEREIN_REGISTER = 'Amtsgericht Köln, VR 19111';
 export const VEREIN_TAX_ID = '';
 export const VEREIN_FACEBOOK = 'https://facebook.com/lichtspielfreundehuerth';
 export const VEREIN_INSTAGRAM = 'https://instagram.com/lichtspielfreunde_huerth';
-export const VEREIN_POST_CITY = "Hürth";
 
 export const VORSTAND = [
 	{ name: 'Jörg Ludwig', role: '1. Vorsitzender' },
